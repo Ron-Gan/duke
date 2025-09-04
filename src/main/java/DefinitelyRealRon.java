@@ -50,9 +50,10 @@ public class DefinitelyRealRon {
                 }
                 System.out.println(LINE);
                 System.out.print(" Here are the tasks in your list:\n ");
-                for(int i=0; i<taskList.size(); i++){
+                for(int i=0; i<taskList.size()-1; i++){
                     printListString = printListString + (i+1) + ". " + taskList.get(i).printTask() + "\n ";
                 }
+                printListString += (taskList.size()) + ". " + taskList.get(taskList.size()-1).printTask() + "\n";
                 System.out.print(printListString);
                 System.out.println(LINE);
                 printListString="";

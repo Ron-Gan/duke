@@ -12,14 +12,15 @@ public class Task {
     public boolean getStatus(){
         return isDone;
     }
-    public String printTask(){
+    public void printTask(int index){
         String taskString;
+        index +=1;
         if(isDone){
-            taskString = "[X] ";
+            taskString = " " + index + ". [X] ";
         }
         else{
-            taskString = "[ ] ";
+            taskString = " " + index + ". [ ] ";
         }
-        return (taskString + description);
+        System.out.println(taskString + description);
     }
 }

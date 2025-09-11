@@ -22,7 +22,6 @@ public class DefinitelyRealRon {
         Scanner in = new Scanner(System.in);
         String inputString;
         inputString = in.nextLine();
-        String printListString = "";
 
         while(!inputString.equals("bye")){ //does not end until user inputs "bye"
             String[] words = inputString.split(" ", 2);
@@ -33,15 +32,19 @@ public class DefinitelyRealRon {
                 case "mark":
                     targetTaskForStatusChange = Integer.parseInt(words[1])-1;
                     taskList.get(targetTaskForStatusChange).setStatus(true);
-                    printWithLine(" You're so productive! I've marked this task as done:\n " 
-                                + taskList.get(targetTaskForStatusChange).printTask());
+                    System.out.println(LINE);
+                    System.out.println(" You're so productive! I've marked this task as done:");
+                    taskList.get(targetTaskForStatusChange).printTask(targetTaskForStatusChange);
+                    System.out.println(LINE);
                     break;
                     
                 case "unmark":
                     targetTaskForStatusChange = Integer.parseInt(words[1])-1;
                     taskList.get(targetTaskForStatusChange).setStatus(false);
-                    printWithLine(" L! I've marked this task as not done yet:\n " 
-                                + taskList.get(targetTaskForStatusChange).printTask());
+                    System.out.println(LINE);
+                    System.out.println(" L! I've marked this task as not done yet:");
+                    taskList.get(targetTaskForStatusChange).printTask(targetTaskForStatusChange);
+                    System.out.println(LINE);
                     break;
 
                 case "list":
@@ -51,14 +54,11 @@ public class DefinitelyRealRon {
                         continue;
                     }
                     System.out.println(LINE);
-                    System.out.print(" Here are the tasks in your list:\n ");
-                    for(int i=0; i<taskList.size()-1; i++){
-                        printListString = printListString + (i+1) + ". " + taskList.get(i).printTask() + "\n ";
+                    System.out.println(" Here are the tasks in your list:");
+                    for(int i=0; i<taskList.size(); i++){
+                        taskList.get(i).printTask(i);
                     }
-                    printListString += (taskList.size()) + ". " + taskList.get(taskList.size()-1).printTask() + "\n";
-                    System.out.print(printListString);
                     System.out.println(LINE);
-                    printListString="";
                     break;
 
                 default:

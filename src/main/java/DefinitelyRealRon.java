@@ -22,9 +22,10 @@ public class DefinitelyRealRon {
         Scanner in = new Scanner(System.in);
         String inputString;
         inputString = in.nextLine();
+        int index = 1;
 
         while(!inputString.equals("bye")){ //does not end until user inputs "bye"
-            String[] words = inputString.split(" ", 2);
+            String[] words = inputString.split(" ");
             String firstWord = words[0];
             int targetTaskForStatusChange = -1;
 
@@ -34,7 +35,7 @@ public class DefinitelyRealRon {
                     taskList.get(targetTaskForStatusChange).setStatus(true);
                     System.out.println(LINE);
                     System.out.println(" You're so productive! I've marked this task as done:");
-                    taskList.get(targetTaskForStatusChange).printTask(targetTaskForStatusChange);
+                    taskList.get(targetTaskForStatusChange).printTask();
                     System.out.println(LINE);
                     break;
                     
@@ -43,7 +44,7 @@ public class DefinitelyRealRon {
                     taskList.get(targetTaskForStatusChange).setStatus(false);
                     System.out.println(LINE);
                     System.out.println(" L! I've marked this task as not done yet:");
-                    taskList.get(targetTaskForStatusChange).printTask(targetTaskForStatusChange);
+                    taskList.get(targetTaskForStatusChange).printTask();
                     System.out.println(LINE);
                     break;
 
@@ -56,13 +57,14 @@ public class DefinitelyRealRon {
                     System.out.println(LINE);
                     System.out.println(" Here are the tasks in your list:");
                     for(int i=0; i<taskList.size(); i++){
-                        taskList.get(i).printTask(i);
+                        taskList.get(i).printTask();
                     }
                     System.out.println(LINE);
                     break;
 
                 default:
-                    taskList.add(new Task(inputString));
+                    taskList.add(new Task(inputString,index));
+                    index += 1;
                     echo(inputString);
                     break;
             }

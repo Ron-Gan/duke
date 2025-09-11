@@ -1,5 +1,5 @@
 import java.util.Scanner;
-import classes.Task;
+import classes.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -25,10 +25,15 @@ public class DefinitelyRealRon {
         int index = 1;
 
         while(!inputString.equals("bye")){ //does not end until user inputs "bye"
-            String[] words = inputString.split(" ");
+            String[] dates = inputString.split("/");
+            String[] words = dates[0].split(" ");
             String firstWord = words[0];
             int targetTaskForStatusChange = -1;
-
+            String taskName = "";
+            for(int i=1; i<words.length-1;i+=1)
+                taskName+= words[i] + " ";
+            taskName += words[words.length-1]; 
+            
             switch (firstWord) {
                 case "mark":
                     targetTaskForStatusChange = Integer.parseInt(words[1])-1;
@@ -62,10 +67,47 @@ public class DefinitelyRealRon {
                     System.out.println(LINE);
                     break;
 
+                case "todo":
+                    taskList.add(new Todo(taskName,index));
+                    System.out.println(LINE);
+                    System.out.println(" Got it. I've added this task:");
+                    System.out.println("  [T][ ] "+ taskName);
+                    System.out.println(" Now you have " + taskList.size() + " tasks in your list.");
+                    System.out.println(LINE);
+                    index+=1;
+                    break;
+
+                case "deadline":
+                    String deadline = inputString.split("/by ")[1];
+                    taskList.add(new Deadline(taskName,index,deadline));
+                    System.out.println(LINE);
+                    System.out.println(" Got it. I've added this task:");
+                    System.out.println("  [D][ ] "+ taskName  + " (by: " + deadline + ")");
+                    System.out.println(" Now you have " + taskList.size() + " tasks in your list.");
+                    System.out.println(LINE);
+                    index+=1;
+                    break;
+
+                case "event":
+                    //Only accounted for /from before /to
+                    String fromToString = inputString.split("/from ")[1];
+                    String fromDate = fromToString.split("/to ")[0];
+                    String toDate = fromToString.split("/to ")[1];
+                    taskList.add(new Event(taskName,index,fromDate,toDate));
+                    System.out.println(LINE);
+                    System.out.println(" Got it. I've added this task:");
+                    System.out.println("  [E][ ] "+ taskName  + " (from: " + fromDate + "to: "+ toDate + ")");
+                    System.out.println(" Now you have " + taskList.size() + " tasks in your list.");
+                    System.out.println(LINE);
+                    index+=1;
+                    break;
+
                 default:
-                    taskList.add(new Task(inputString,index));
+                    if(words.length>1)
+                        taskName = words[0] + " " + taskName;
+                    taskList.add(new Task(taskName,index));
                     index += 1;
-                    echo(inputString);
+                    echo(taskName);
                     break;
             }
 

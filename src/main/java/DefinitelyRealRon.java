@@ -28,41 +28,45 @@ public class DefinitelyRealRon {
             String[] words = inputString.split(" ", 2);
             String firstWord = words[0];
             int targetTaskForStatusChange = -1;
-            if (words.length > 1 && (firstWord.equals("mark") || firstWord.equals("unmark")))
-                targetTaskForStatusChange = Integer.parseInt(words[1])-1;
 
-            if (firstWord.equals("mark")){
-                taskList.get(targetTaskForStatusChange).setStatus(true);
-                printWithLine(" You're so productive! I've marked this task as done:\n " 
+            switch (firstWord) {
+                case "mark":
+                    targetTaskForStatusChange = Integer.parseInt(words[1])-1;
+                    taskList.get(targetTaskForStatusChange).setStatus(true);
+                    printWithLine(" You're so productive! I've marked this task as done:\n " 
                                 + taskList.get(targetTaskForStatusChange).printTask());
-            }
-            else if (firstWord.equals("unmark")){
-                taskList.get(targetTaskForStatusChange).setStatus(false);
-                printWithLine(" L! I've marked this task as not done yet:\n " 
+                    break;
+                    
+                case "unmark":
+                    targetTaskForStatusChange = Integer.parseInt(words[1])-1;
+                    taskList.get(targetTaskForStatusChange).setStatus(false);
+                    printWithLine(" L! I've marked this task as not done yet:\n " 
                                 + taskList.get(targetTaskForStatusChange).printTask());
+                    break;
+
+                case "list":
+                    if(taskList.size()==0){
+                        printWithLine(" Your list is empty!");
+                        inputString = in.nextLine();
+                        continue;
+                    }
+                    System.out.println(LINE);
+                    System.out.print(" Here are the tasks in your list:\n ");
+                    for(int i=0; i<taskList.size()-1; i++){
+                        printListString = printListString + (i+1) + ". " + taskList.get(i).printTask() + "\n ";
+                    }
+                    printListString += (taskList.size()) + ". " + taskList.get(taskList.size()-1).printTask() + "\n";
+                    System.out.print(printListString);
+                    System.out.println(LINE);
+                    printListString="";
+                    break;
+
+                default:
+                    taskList.add(new Task(inputString));
+                    echo(inputString);
+                    break;
             }
 
-            else if(inputString.equals("list")){
-                if(taskList.size()==0){
-                    printWithLine(" Your list is empty!");
-                    inputString = in.nextLine();
-                    continue;
-                }
-                System.out.println(LINE);
-                System.out.print(" Here are the tasks in your list:\n ");
-                for(int i=0; i<taskList.size()-1; i++){
-                    printListString = printListString + (i+1) + ". " + taskList.get(i).printTask() + "\n ";
-                }
-                printListString += (taskList.size()) + ". " + taskList.get(taskList.size()-1).printTask() + "\n";
-                System.out.print(printListString);
-                System.out.println(LINE);
-                printListString="";
-            }
-
-            else{
-                taskList.add(new Task(inputString));
-                echo(inputString);
-            }
             inputString = in.nextLine();
         }
         System.out.println(LINE);

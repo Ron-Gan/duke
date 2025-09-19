@@ -2,11 +2,14 @@ import java.util.Scanner;
 import classes.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 public class DefinitelyRealRon {
     
     private static final String LINE = "____________________________________________________________";
     public static List<Task> taskList = new ArrayList<Task>();
+    public static Set<String> commandSet = Set.of(
+        "list","mark", "unmark","todo","deadline","event");
 
     public static void printWithLine(String inputString){
             System.out.println(LINE);
@@ -28,11 +31,28 @@ public class DefinitelyRealRon {
             String[] dates = inputString.split("/");
             String[] words = dates[0].split(" ");
             String firstWord = words[0];
+            try{
+                if(!commandSet.contains(firstWord))
+                    throw new IllegalArgumentException("Unknown Command");       
+                if(!firstWord.equals("list")&&words.length<=1)
+                    throw new IndexOutOfBoundsException();
+            }
+            catch(IllegalArgumentException e){
+                printWithLine(" Beep Boop. I don't understand " + inputString + ". :(");
+                inputString = in.nextLine();
+                continue;
+            }
+            catch(IndexOutOfBoundsException e){
+                printWithLine(" Beep Boop. Description for " + firstWord + "cannot be empty. ");
+                inputString = in.nextLine();
+                continue;
+            }
+            
             int targetTaskForStatusChange = -1;
             String taskName = "";
             for(int i=1; i<words.length-1;i+=1)
                 taskName+= words[i] + " ";
-            taskName += words[words.length-1]; 
+            taskName += words[words.length-1];
             
             switch (firstWord) {
                 case "mark":
@@ -68,6 +88,14 @@ public class DefinitelyRealRon {
                     break;
 
                 case "todo":
+                    try{
+                        if(words[1].isBlank())
+                            throw new IllegalArgumentException("Empty Todo Description");
+                    }catch(IllegalArgumentException e){
+                        printWithLine(" Bruh. You did not describe the task " + inputString + ". :(");
+                        inputString = in.nextLine();
+                        continue;
+                    }
                     taskList.add(new Todo(taskName,index));
                     System.out.println(LINE);
                     System.out.println(" Got it. I've added this task:");

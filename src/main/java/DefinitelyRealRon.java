@@ -38,12 +38,12 @@ public class DefinitelyRealRon {
                     throw new IndexOutOfBoundsException();
             }
             catch(IllegalArgumentException e){
-                printWithLine(" Beep Boop. I don't understand " + inputString + ". :(");
+                printWithLine(" Beep Boop. I don't understand " + inputString + " :(");
                 inputString = in.nextLine();
                 continue;
             }
             catch(IndexOutOfBoundsException e){
-                printWithLine(" Beep Boop. Description for " + firstWord + "cannot be empty. ");
+                printWithLine(" Beep Boop. Operation FAILED!\n Description for " + firstWord + " cannot be empty :(");
                 inputString = in.nextLine();
                 continue;
             }
@@ -54,9 +54,36 @@ public class DefinitelyRealRon {
                 taskName+= words[i] + " ";
             taskName += words[words.length-1];
             
+            if(firstWord.equals("mark")||firstWord.equals("unmark")){
+                    if(taskList.size()<=0){
+                        printWithLine(" Beep Boop. Operation FAILED!\n Your list is empty :(");
+                        inputString = in.nextLine();
+                        continue;
+                    }
+                    try{
+                        targetTaskForStatusChange = Integer.parseInt(words[1])-1;
+                        taskList.get(targetTaskForStatusChange).getStatus();
+                    }catch(IndexOutOfBoundsException e){
+                            printWithLine(" Beep Boop. Operation FAILED!\n You can't " + firstWord 
+                            + " task "+ (targetTaskForStatusChange+1)
+                            + " as there is only " + taskList.size()+ " tasks in your list :(");
+                            inputString = in.nextLine();
+                            continue;
+                    }catch(NumberFormatException e){
+                            printWithLine(" Beep Boop. Operation FAILED!\n"
+                            +"Bruh you gotta put input a valid number :(");
+                            inputString = in.nextLine();
+                            continue;
+                    }
+
+                }
+            
             switch (firstWord) {
                 case "mark":
-                    targetTaskForStatusChange = Integer.parseInt(words[1])-1;
+                    if(taskList.get(targetTaskForStatusChange).getStatus()){
+                        printWithLine(taskName+" was already marked.");
+                        break;
+                    }
                     taskList.get(targetTaskForStatusChange).setStatus(true);
                     System.out.println(LINE);
                     System.out.println(" You're so productive! I've marked this task as done:");
@@ -65,7 +92,10 @@ public class DefinitelyRealRon {
                     break;
                     
                 case "unmark":
-                    targetTaskForStatusChange = Integer.parseInt(words[1])-1;
+                    if(!taskList.get(targetTaskForStatusChange).getStatus()){
+                        printWithLine(taskName+" was already unmarked.");
+                        break;
+                    }
                     taskList.get(targetTaskForStatusChange).setStatus(false);
                     System.out.println(LINE);
                     System.out.println(" L! I've marked this task as not done yet:");

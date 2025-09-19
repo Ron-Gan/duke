@@ -76,6 +76,15 @@ public class DefinitelyRealRon {
                             continue;
                     }
 
+                } else{
+                    try{
+                        if(taskName.isBlank())
+                            throw new IllegalArgumentException("Empty Todo Description");
+                    }catch(IllegalArgumentException e){
+                        printWithLine(" Beep Boop. Operation FAILED\n You did not describe the task :(");
+                        inputString = in.nextLine();
+                        continue;
+                    }
                 }
             
             switch (firstWord) {
@@ -118,14 +127,6 @@ public class DefinitelyRealRon {
                     break;
 
                 case "todo":
-                    try{
-                        if(words[1].isBlank())
-                            throw new IllegalArgumentException("Empty Todo Description");
-                    }catch(IllegalArgumentException e){
-                        printWithLine(" Bruh. You did not describe the task " + inputString + ". :(");
-                        inputString = in.nextLine();
-                        continue;
-                    }
                     taskList.add(new Todo(taskName,index));
                     System.out.println(LINE);
                     System.out.println(" Got it. I've added this task:");
@@ -136,7 +137,18 @@ public class DefinitelyRealRon {
                     break;
 
                 case "deadline":
-                    String deadline = inputString.split("/by ")[1];
+                    String deadline;
+                    try{
+                        deadline = inputString.split("/by ")[1];
+                        if(deadline.isBlank())
+                            throw new ArrayIndexOutOfBoundsException();
+                    }catch(ArrayIndexOutOfBoundsException e){
+                        printWithLine("Beep Boop. OPERATION FAILED.\n"+
+                            "Please input a valid /by date"
+                            );
+                        break;
+                    }
+                    
                     taskList.add(new Deadline(taskName,index,deadline));
                     System.out.println(LINE);
                     System.out.println(" Got it. I've added this task:");

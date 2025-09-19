@@ -71,7 +71,7 @@ public class DefinitelyRealRon {
                             continue;
                     }catch(NumberFormatException e){
                             printWithLine(" Beep Boop. Operation FAILED!\n"
-                            +"Bruh you gotta put input a valid number :(");
+                            +" Bruh you gotta put input a valid number :(");
                             inputString = in.nextLine();
                             continue;
                     }
@@ -90,7 +90,7 @@ public class DefinitelyRealRon {
             switch (firstWord) {
                 case "mark":
                     if(taskList.get(targetTaskForStatusChange).getStatus()){
-                        printWithLine(taskName+" was already marked.");
+                        printWithLine(" Task "+taskName+" was already marked.");
                         break;
                     }
                     taskList.get(targetTaskForStatusChange).setStatus(true);
@@ -102,7 +102,7 @@ public class DefinitelyRealRon {
                     
                 case "unmark":
                     if(!taskList.get(targetTaskForStatusChange).getStatus()){
-                        printWithLine(taskName+" was already unmarked.");
+                        printWithLine(" Task "+taskName+" was already unmarked.");
                         break;
                     }
                     taskList.get(targetTaskForStatusChange).setStatus(false);
@@ -143,8 +143,8 @@ public class DefinitelyRealRon {
                         if(deadline.isBlank())
                             throw new ArrayIndexOutOfBoundsException();
                     }catch(ArrayIndexOutOfBoundsException e){
-                        printWithLine("Beep Boop. OPERATION FAILED.\n"+
-                            "Please input a valid /by date"
+                        printWithLine(" Beep Boop. OPERATION FAILED.\n"+
+                            " Please input a valid /by date"
                             );
                         break;
                     }
@@ -159,14 +159,39 @@ public class DefinitelyRealRon {
                     break;
 
                 case "event":
-                    //Only accounted for /from before /to
-                    String fromToString = inputString.split("/from ")[1];
-                    String fromDate = fromToString.split("/to ")[0];
-                    String toDate = fromToString.split("/to ")[1];
+                    String fromDate="", toDate="";
+                    boolean fromExist = (inputString.contains("/from "));
+                    boolean toExist = (inputString.contains("/to "));
+
+                    if(!fromExist || !toExist){
+                        printWithLine(" Beep Boop. OPERATION FAILED.\n"
+                                + " Please input a valid "
+                                + (!fromExist ? "/from" : "/to") + " date"
+                        );
+                        break;
+                    }
+
+                    if(inputString.indexOf("/from ")<inputString.indexOf("/to ")){
+                        fromDate = inputString.substring(inputString.indexOf("/from ")+6,inputString.indexOf("/to ")-1);
+                        toDate = inputString.substring(inputString.indexOf("/to ")+4);
+                    }
+                    else{
+                        toDate=inputString.substring(inputString.indexOf("/to ")+4,inputString.indexOf("/from ")-1);
+                        fromDate = inputString.substring(inputString.indexOf("/from ")+6);
+                    }                   
+
+                    if(fromDate.isBlank()||toDate.isBlank()){
+                        printWithLine(" Beep Boop. OPERATION FAILED.\n"
+                                + " Please input a valid "
+                                + (fromDate.isBlank() ? "/from" : "/to") + " date"
+                        );
+                        break;
+                    }
+                    
                     taskList.add(new Event(taskName,index,fromDate,toDate));
                     System.out.println(LINE);
                     System.out.println(" Got it. I've added this task:");
-                    System.out.println("  [E][ ] "+ taskName  + " (from: " + fromDate + "to: "+ toDate + ")");
+                    System.out.println("  [E][ ] "+ taskName  + " (from: " + fromDate + " to: "+ toDate + ")");
                     System.out.println(" Now you have " + taskList.size() + " tasks in your list.");
                     System.out.println(LINE);
                     index+=1;

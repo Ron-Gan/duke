@@ -11,6 +11,18 @@ public class Deadline extends Task {
     public void printTask(){
         String taskString;
         if(isDone){
+            taskString = "   [D][X] ";
+        }
+        else{
+            taskString = "   [D][ ] ";
+        }
+        System.out.println(taskString + description + " (by: " + deadline + ")");
+    }
+
+    @Override
+    public void printTaskWithIndex(){
+        String taskString;
+        if(isDone){
             taskString = " " + index + ". [D][X] ";
         }
         else{

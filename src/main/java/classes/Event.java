@@ -2,14 +2,26 @@ package classes;
 
 public class Event extends Task {
     public String toDate, fromDate;
-    public Event(String desc, int ind, String toDate, String fromDate){
+    public Event(String desc, int ind, String fromDate, String toDate){
         super(desc,ind);
-        this.toDate = toDate;
         this.fromDate = fromDate;
+        this.toDate = toDate;
     }
 
     @Override
     public void printTask(){
+        String taskString;
+        if(isDone){
+            taskString = "   [E][X] ";
+        }
+        else{
+            taskString = "   [E][ ] ";
+        }
+        System.out.println(taskString + description + " (from: " + fromDate + " to: "+ toDate + ")");
+    }
+
+    @Override
+    public void printTaskWithIndex(){
         String taskString;
         if(isDone){
             taskString = " " + index + ". [E][X] ";

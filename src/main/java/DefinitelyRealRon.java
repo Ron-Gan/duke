@@ -1,15 +1,21 @@
 import java.util.Scanner;
 import classes.*;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
+import java.util.Arrays;
+import java.util.stream.Collectors;
 
 public class DefinitelyRealRon {
     
     private static final String LINE = "____________________________________________________________";
     public static List<Task> taskList = new ArrayList<Task>();
-    public static Set<String> commandSet = Set.of(
-        "list","mark", "unmark","todo","deadline","event");
+
+    public static Set<String> commandSet = 
+        Arrays.stream(Commands.values())
+              .map(command -> command.toString().toLowerCase())
+              .collect(Collectors.toSet());
 
     public static void printWithLine(String inputString){
             System.out.println(LINE);
@@ -48,24 +54,24 @@ public class DefinitelyRealRon {
                 continue;
             }
             
-            int targetTaskForStatusChange = -1;
+            int targetTaskForChange = -1;
             String taskName = "";
             for(int i=1; i<words.length-1;i+=1)
                 taskName+= words[i] + " ";
             taskName += words[words.length-1];
             
-            if(firstWord.equals("mark")||firstWord.equals("unmark")){
+            if(firstWord.equals("mark")||firstWord.equals("unmark")||firstWord.equals("delete")){
                     if(taskList.size()<=0){
                         printWithLine(" Beep Boop. Operation FAILED!\n Your list is empty :(");
                         inputString = in.nextLine();
                         continue;
                     }
                     try{
-                        targetTaskForStatusChange = Integer.parseInt(words[1])-1;
-                        taskList.get(targetTaskForStatusChange).getStatus();
+                        targetTaskForChange = Integer.parseInt(words[1])-1;
+                        taskList.get(targetTaskForChange).getStatus();
                     }catch(IndexOutOfBoundsException e){
                             printWithLine(" Beep Boop. Operation FAILED!\n You can't " + firstWord 
-                            + " task "+ (targetTaskForStatusChange+1)
+                            + " task "+ (targetTaskForChange+1)
                             + " as there is only " + taskList.size()+ " tasks in your list :(");
                             inputString = in.nextLine();
                             continue;
@@ -76,39 +82,30 @@ public class DefinitelyRealRon {
                             continue;
                     }
 
-                } else{
-                    try{
-                        if(taskName.isBlank())
-                            throw new IllegalArgumentException("Empty Todo Description");
-                    }catch(IllegalArgumentException e){
-                        printWithLine(" Beep Boop. Operation FAILED\n You did not describe the task :(");
-                        inputString = in.nextLine();
-                        continue;
-                    }
                 }
             
             switch (firstWord) {
                 case "mark":
-                    if(taskList.get(targetTaskForStatusChange).getStatus()){
+                    if(taskList.get(targetTaskForChange).getStatus()){
                         printWithLine(" Task "+taskName+" was already marked.");
                         break;
                     }
-                    taskList.get(targetTaskForStatusChange).setStatus(true);
+                    taskList.get(targetTaskForChange).setStatus(true);
                     System.out.println(LINE);
                     System.out.println(" You're so productive! I've marked this task as done:");
-                    taskList.get(targetTaskForStatusChange).printTask();
+                    taskList.get(targetTaskForChange).printTask();
                     System.out.println(LINE);
                     break;
                     
                 case "unmark":
-                    if(!taskList.get(targetTaskForStatusChange).getStatus()){
+                    if(!taskList.get(targetTaskForChange).getStatus()){
                         printWithLine(" Task "+taskName+" was already unmarked.");
                         break;
                     }
-                    taskList.get(targetTaskForStatusChange).setStatus(false);
+                    taskList.get(targetTaskForChange).setStatus(false);
                     System.out.println(LINE);
                     System.out.println(" L! I've marked this task as not done yet:");
-                    taskList.get(targetTaskForStatusChange).printTask();
+                    taskList.get(targetTaskForChange).printTask();
                     System.out.println(LINE);
                     break;
 
@@ -121,7 +118,7 @@ public class DefinitelyRealRon {
                     System.out.println(LINE);
                     System.out.println(" Here are the tasks in your list:");
                     for(int i=0; i<taskList.size(); i++){
-                        taskList.get(i).printTask();
+                        taskList.get(i).printTaskWithIndex();
                     }
                     System.out.println(LINE);
                     break;
@@ -130,7 +127,7 @@ public class DefinitelyRealRon {
                     taskList.add(new Todo(taskName,index));
                     System.out.println(LINE);
                     System.out.println(" Got it. I've added this task:");
-                    System.out.println("  [T][ ] "+ taskName);
+                    taskList.get(index-1).printTask();
                     System.out.println(" Now you have " + taskList.size() + " tasks in your list.");
                     System.out.println(LINE);
                     index+=1;
@@ -152,7 +149,7 @@ public class DefinitelyRealRon {
                     taskList.add(new Deadline(taskName,index,deadline));
                     System.out.println(LINE);
                     System.out.println(" Got it. I've added this task:");
-                    System.out.println("  [D][ ] "+ taskName  + " (by: " + deadline + ")");
+                    taskList.get(index-1).printTask();
                     System.out.println(" Now you have " + taskList.size() + " tasks in your list.");
                     System.out.println(LINE);
                     index+=1;
@@ -191,10 +188,23 @@ public class DefinitelyRealRon {
                     taskList.add(new Event(taskName,index,fromDate,toDate));
                     System.out.println(LINE);
                     System.out.println(" Got it. I've added this task:");
-                    System.out.println("  [E][ ] "+ taskName  + " (from: " + fromDate + " to: "+ toDate + ")");
+                    taskList.get(index-1).printTask();
                     System.out.println(" Now you have " + taskList.size() + " tasks in your list.");
                     System.out.println(LINE);
                     index+=1;
+                    break;
+
+                case "delete":
+                    System.out.println(LINE);
+                    System.out.println(" Ight bet. I've deleted this task:");
+                    taskList.get(targetTaskForChange).printTask();
+                    System.out.println(" Now you have " + (taskList.size()-1) + " tasks in your list.");
+                    System.out.println(LINE);
+                    taskList.remove(targetTaskForChange);
+                    for(int i=targetTaskForChange; i<taskList.size(); i++)
+                    taskList.get(i).setIndex(i+1);
+
+                    index-=1;
                     break;
 
                 default:

@@ -1,6 +1,10 @@
 import java.util.Scanner;
 import classes.*;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
@@ -25,6 +29,88 @@ public class DefinitelyRealRon {
      
     public static void echo(String inputString){
         printWithLine(" added: "+inputString);
+    }
+
+    public static void convertDataToList() throws FileNotFoundException , IOException{
+        File dir = new File("./data");
+        if (!dir.exists()) {
+            dir.mkdirs();
+        }
+        File f = new File(dir, "Data.txt");
+        if(!f.exists())
+            f.createNewFile();
+        Scanner s = new Scanner(f);
+        while(s.hasNext()){
+            String line = s.nextLine();
+            String[] parts = line.split(" \\| ");
+            String taskType = parts[0];
+            boolean isDone = parts[1].equals("1");
+            String description = parts[2];
+            int index = taskList.size()+1;
+
+            switch (taskType) {
+                case "T":
+                    taskList.add(new Todo(description,index));
+                    taskList.get(index-1).setStatus(isDone);
+                    break;
+                case "D":
+                    String deadline = parts[3];
+                    taskList.add(new Deadline(description,index,deadline));
+                    taskList.get(index-1).setStatus(isDone);
+                    break;
+                case "E":
+                    String fromDate = parts[3];
+                    String toDate = parts[4];
+                    taskList.add(new Event(description,index,fromDate,toDate));
+                    taskList.get(index-1).setStatus(isDone);
+                    break;
+                default:
+                    break;
+            }
+        }
+    }
+
+    public static String convertListToDataFormat(){
+        StringBuilder dataString = new StringBuilder();
+        taskList.forEach(task -> {
+            String taskString = "";
+            if(task instanceof Todo){
+                taskString = "T | ";
+            }
+            else if(task instanceof Deadline){
+                taskString = "D | ";
+            }
+            else if(task instanceof Event){
+                taskString = "E | ";
+            }
+
+            if(task.isDone){
+                taskString += "1 | ";
+            }
+            else{
+                taskString += "0 | ";
+            }
+
+            taskString += task.description;
+
+            if(task instanceof Deadline){
+                taskString += " | " + ((Deadline) task).deadline;
+            }
+            else if(task instanceof Event){
+                taskString += " | " + ((Event) task).fromDate + " | " + ((Event) task).toDate;
+            }
+
+            taskString += "\n";
+            dataString.append(taskString);
+        });
+        return dataString.toString();
+    }
+
+    public static void updateData() throws IOException{
+        File f = new File("./data/Data.txt");
+        FileWriter fw = new FileWriter(f);
+        fw.write(convertListToDataFormat());
+        fw.close();
     }
 
     public static void readInput(){
@@ -131,6 +217,13 @@ public class DefinitelyRealRon {
                     System.out.println(" Now you have " + taskList.size() + " tasks in your list.");
                     System.out.println(LINE);
                     index+=1;
+                    try{
+                        updateData();
+                    }
+                    catch(IOException e){
+                        System.out.println(" Beep Boop. An error occurred saving data.");
+                        System.out.println(LINE);
+                    }
                     break;
 
                 case "deadline":
@@ -224,6 +317,17 @@ public class DefinitelyRealRon {
         String welcomeString = " Yo! I'm DefinitelyRealRon. Definitely Real. Definitely Ron.\n How may I help you today?";
         String byeString = " Seeya! Hope I was helpful. I'm DefinitelyRealRon!";
         printWithLine(welcomeString);
+        try{
+            convertDataToList();
+        }
+        catch(FileNotFoundException e){
+            System.out.println(" Beep Boop. An error occurred loading data.");
+            System.out.println(LINE);
+        }
+        catch(IOException e){
+            System.out.println(" Beep Boop. An error occurred creating new text file.");
+            System.out.println(LINE);
+        }
         readInput();
         System.out.println(byeString);
         System.out.println(LINE);

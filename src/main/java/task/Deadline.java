@@ -1,4 +1,4 @@
-package classes;
+package task;
 
 public class Deadline extends Task {
     public String deadline;
@@ -8,7 +8,7 @@ public class Deadline extends Task {
     }
 
     @Override
-    public void printTask(){
+    public String getTaskString(){
         String taskString;
         if(isDone){
             taskString = "   [D][X] ";
@@ -16,11 +16,11 @@ public class Deadline extends Task {
         else{
             taskString = "   [D][ ] ";
         }
-        System.out.println(taskString + description + " (by: " + deadline + ")");
+        return(taskString + description + " (by: " + deadline + ")");
     }
 
     @Override
-    public void printTaskWithIndex(){
+    public String getTaskStringWithIndex(){
         String taskString;
         if(isDone){
             taskString = " " + index + ". [D][X] ";
@@ -28,6 +28,6 @@ public class Deadline extends Task {
         else{
             taskString = " " + index + ". [D][ ] ";
         }
-        System.out.println(taskString + description + " (by: " + deadline + ")");
+        return(taskString + description + " (by: " + deadline + ")");
     }
 }

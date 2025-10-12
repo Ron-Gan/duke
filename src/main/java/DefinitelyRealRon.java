@@ -1,335 +1,68 @@
-import java.util.Scanner;
-import classes.*;
+import commands.*;
+import parser.*;
+import storage.Storage;
+import storage.Storage.InvalidStoragePathException;
+import task.*;
+import ui.*;
 
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileWriter;
+import static common.Messages.ERROR_EMPTY_LIST;
+import static common.Messages.ERROR_IO_INITIALISATION;
+import static common.Messages.ERROR_OUT_OF_BOUNDS;
+
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Set;
-import java.util.Arrays;
-import java.util.stream.Collectors;
 
 public class DefinitelyRealRon {
-    
-    private static final String LINE = "____________________________________________________________";
-    public static List<Task> taskList = new ArrayList<Task>();
+    private Ui ui;
+    private TaskList tasks;
+    private Storage storage;
 
-    public static Set<String> commandSet = 
-        Arrays.stream(Commands.values())
-              .map(command -> command.toString().toLowerCase())
-              .collect(Collectors.toSet());
-
-    public static void printWithLine(String inputString){
-            System.out.println(LINE);
-            System.out.println(inputString);
-            System.out.println(LINE);
-    }
-     
-    public static void echo(String inputString){
-        printWithLine(" added: "+inputString);
+    public DefinitelyRealRon(String filePath){
+        ui = new Ui();
+        tasks = new TaskList();
+        storage = new Storage(filePath);
     }
 
-    public static void convertDataToList() throws FileNotFoundException , IOException{
-        File dir = new File("./data");
-        if (!dir.exists()) {
-            dir.mkdirs();
-        }
-        File f = new File(dir, "Data.txt");
-        if(!f.exists())
-            f.createNewFile();
-        Scanner s = new Scanner(f);
-        while(s.hasNext()){
-            String line = s.nextLine();
-            String[] parts = line.split(" \\| ");
-            String taskType = parts[0];
-            boolean isDone = parts[1].equals("1");
-            String description = parts[2];
-            int index = taskList.size()+1;
-
-            switch (taskType) {
-                case "T":
-                    taskList.add(new Todo(description,index));
-                    taskList.get(index-1).setStatus(isDone);
-                    break;
-                case "D":
-                    String deadline = parts[3];
-                    taskList.add(new Deadline(description,index,deadline));
-                    taskList.get(index-1).setStatus(isDone);
-                    break;
-                case "E":
-                    String fromDate = parts[3];
-                    String toDate = parts[4];
-                    taskList.add(new Event(description,index,fromDate,toDate));
-                    taskList.get(index-1).setStatus(isDone);
-                    break;
-                default:
-                    break;
-            }
-        }
-    }
-
-    public static String convertListToDataFormat(){
-        StringBuilder dataString = new StringBuilder();
-        taskList.forEach(task -> {
-            String taskString = "";
-            if(task instanceof Todo){
-                taskString = "T | ";
-            }
-            else if(task instanceof Deadline){
-                taskString = "D | ";
-            }
-            else if(task instanceof Event){
-                taskString = "E | ";
-            }
-
-            if(task.isDone){
-                taskString += "1 | ";
-            }
-            else{
-                taskString += "0 | ";
-            }
-
-            taskString += task.description;
-
-            if(task instanceof Deadline){
-                taskString += " | " + ((Deadline) task).deadline;
-            }
-            else if(task instanceof Event){
-                taskString += " | " + ((Event) task).fromDate + " | " + ((Event) task).toDate;
-            }
-
-            taskString += "\n";
-            dataString.append(taskString);
-        });
-        return dataString.toString();
-    }
-
-    public static void updateData() throws IOException{
-        File f = new File("./data/Data.txt");
-        FileWriter fw = new FileWriter(f);
-        fw.write(convertListToDataFormat());
-        fw.close();
-    }
-
-    public static void readInput(){
-        Scanner in = new Scanner(System.in);
-        String inputString;
-        inputString = in.nextLine();
-        int index = 1;
-
-        while(!inputString.equals("bye")){ //does not end until user inputs "bye"
-            String[] dates = inputString.split("/");
-            String[] words = dates[0].split(" ");
-            String firstWord = words[0];
-            try{
-                if(!commandSet.contains(firstWord))
-                    throw new IllegalArgumentException("Unknown Command");       
-                if(!firstWord.equals("list")&&words.length<=1)
-                    throw new IndexOutOfBoundsException();
-            }
-            catch(IllegalArgumentException e){
-                printWithLine(" Beep Boop. I don't understand " + inputString + " :(");
-                inputString = in.nextLine();
-                continue;
-            }
-            catch(IndexOutOfBoundsException e){
-                printWithLine(" Beep Boop. Operation FAILED!\n Description for " + firstWord + " cannot be empty :(");
-                inputString = in.nextLine();
-                continue;
-            }
-            
-            int targetTaskForChange = -1;
-            String taskName = "";
-            for(int i=1; i<words.length-1;i+=1)
-                taskName+= words[i] + " ";
-            taskName += words[words.length-1];
-            
-            if(firstWord.equals("mark")||firstWord.equals("unmark")||firstWord.equals("delete")){
-                    if(taskList.size()<=0){
-                        printWithLine(" Beep Boop. Operation FAILED!\n Your list is empty :(");
-                        inputString = in.nextLine();
-                        continue;
-                    }
-                    try{
-                        targetTaskForChange = Integer.parseInt(words[1])-1;
-                        taskList.get(targetTaskForChange).getStatus();
-                    }catch(IndexOutOfBoundsException e){
-                            printWithLine(" Beep Boop. Operation FAILED!\n You can't " + firstWord 
-                            + " task "+ (targetTaskForChange+1)
-                            + " as there is only " + taskList.size()+ " tasks in your list :(");
-                            inputString = in.nextLine();
-                            continue;
-                    }catch(NumberFormatException e){
-                            printWithLine(" Beep Boop. Operation FAILED!\n"
-                            +" Bruh you gotta put input a valid number :(");
-                            inputString = in.nextLine();
-                            continue;
-                    }
-
-                }
-            
-            switch (firstWord) {
-                case "mark":
-                    if(taskList.get(targetTaskForChange).getStatus()){
-                        printWithLine(" Task "+taskName+" was already marked.");
-                        break;
-                    }
-                    taskList.get(targetTaskForChange).setStatus(true);
-                    System.out.println(LINE);
-                    System.out.println(" You're so productive! I've marked this task as done:");
-                    taskList.get(targetTaskForChange).printTask();
-                    System.out.println(LINE);
-                    break;
-                    
-                case "unmark":
-                    if(!taskList.get(targetTaskForChange).getStatus()){
-                        printWithLine(" Task "+taskName+" was already unmarked.");
-                        break;
-                    }
-                    taskList.get(targetTaskForChange).setStatus(false);
-                    System.out.println(LINE);
-                    System.out.println(" L! I've marked this task as not done yet:");
-                    taskList.get(targetTaskForChange).printTask();
-                    System.out.println(LINE);
-                    break;
-
-                case "list":
-                    if(taskList.size()==0){
-                        printWithLine(" Your list is empty!");
-                        inputString = in.nextLine();
-                        continue;
-                    }
-                    System.out.println(LINE);
-                    System.out.println(" Here are the tasks in your list:");
-                    for(int i=0; i<taskList.size(); i++){
-                        taskList.get(i).printTaskWithIndex();
-                    }
-                    System.out.println(LINE);
-                    break;
-
-                case "todo":
-                    taskList.add(new Todo(taskName,index));
-                    System.out.println(LINE);
-                    System.out.println(" Got it. I've added this task:");
-                    taskList.get(index-1).printTask();
-                    System.out.println(" Now you have " + taskList.size() + " tasks in your list.");
-                    System.out.println(LINE);
-                    index+=1;
-                    try{
-                        updateData();
-                    }
-                    catch(IOException e){
-                        System.out.println(" Beep Boop. An error occurred saving data.");
-                        System.out.println(LINE);
-                    }
-                    break;
-
-                case "deadline":
-                    String deadline;
-                    try{
-                        deadline = inputString.split("/by ")[1];
-                        if(deadline.isBlank())
-                            throw new ArrayIndexOutOfBoundsException();
-                    }catch(ArrayIndexOutOfBoundsException e){
-                        printWithLine(" Beep Boop. OPERATION FAILED.\n"+
-                            " Please input a valid /by date"
-                            );
-                        break;
-                    }
-                    
-                    taskList.add(new Deadline(taskName,index,deadline));
-                    System.out.println(LINE);
-                    System.out.println(" Got it. I've added this task:");
-                    taskList.get(index-1).printTask();
-                    System.out.println(" Now you have " + taskList.size() + " tasks in your list.");
-                    System.out.println(LINE);
-                    index+=1;
-                    break;
-
-                case "event":
-                    String fromDate="", toDate="";
-                    boolean fromExist = (inputString.contains("/from "));
-                    boolean toExist = (inputString.contains("/to "));
-
-                    if(!fromExist || !toExist){
-                        printWithLine(" Beep Boop. OPERATION FAILED.\n"
-                                + " Please input a valid "
-                                + (!fromExist ? "/from" : "/to") + " date"
-                        );
-                        break;
-                    }
-
-                    if(inputString.indexOf("/from ")<inputString.indexOf("/to ")){
-                        fromDate = inputString.substring(inputString.indexOf("/from ")+6,inputString.indexOf("/to ")-1);
-                        toDate = inputString.substring(inputString.indexOf("/to ")+4);
-                    }
-                    else{
-                        toDate=inputString.substring(inputString.indexOf("/to ")+4,inputString.indexOf("/from ")-1);
-                        fromDate = inputString.substring(inputString.indexOf("/from ")+6);
-                    }                   
-
-                    if(fromDate.isBlank()||toDate.isBlank()){
-                        printWithLine(" Beep Boop. OPERATION FAILED.\n"
-                                + " Please input a valid "
-                                + (fromDate.isBlank() ? "/from" : "/to") + " date"
-                        );
-                        break;
-                    }
-                    
-                    taskList.add(new Event(taskName,index,fromDate,toDate));
-                    System.out.println(LINE);
-                    System.out.println(" Got it. I've added this task:");
-                    taskList.get(index-1).printTask();
-                    System.out.println(" Now you have " + taskList.size() + " tasks in your list.");
-                    System.out.println(LINE);
-                    index+=1;
-                    break;
-
-                case "delete":
-                    System.out.println(LINE);
-                    System.out.println(" Ight bet. I've deleted this task:");
-                    taskList.get(targetTaskForChange).printTask();
-                    System.out.println(" Now you have " + (taskList.size()-1) + " tasks in your list.");
-                    System.out.println(LINE);
-                    taskList.remove(targetTaskForChange);
-                    for(int i=targetTaskForChange; i<taskList.size(); i++)
-                    taskList.get(i).setIndex(i+1);
-
-                    index-=1;
-                    break;
-
-                default:
-                    if(words.length>1)
-                        taskName = words[0] + " " + taskName;
-                    taskList.add(new Task(taskName,index));
-                    index += 1;
-                    echo(taskName);
-                    break;
-            }
-
-            inputString = in.nextLine();
-        }
-        System.out.println(LINE);
-    }
-    public static void main(String[] args) {
-        String welcomeString = " Yo! I'm DefinitelyRealRon. Definitely Real. Definitely Ron.\n How may I help you today?";
-        String byeString = " Seeya! Hope I was helpful. I'm DefinitelyRealRon!";
-        printWithLine(welcomeString);
+    public void run(){
         try{
-            convertDataToList();
+            storage.initFile();
+            tasks = storage.load();
+        }catch (IOException e){
+            ui.showErrorMessage(ERROR_IO_INITIALISATION);
+            System.exit(0);
+        }catch (InvalidStoragePathException e){
+            ui.showErrorMessage(e.getMessage());
+            System.exit(0);
         }
-        catch(FileNotFoundException e){
-            System.out.println(" Beep Boop. An error occurred loading data.");
-            System.out.println(LINE);
+        ui.showWelcomeMessage();
+        runLoopUntilBye();
+        exit();
+    }
+
+    private void runLoopUntilBye(){
+        while(true){
+            String input = ui.getInput();
+            if(input.equals("bye")){
+                break;
+            }
+            Command c = new Parser().parse(input);
+            try{
+                c.execute(tasks,ui,storage);
+            } catch(IndexOutOfBoundsException e){
+                if(tasks.size()<1)
+                    ui.showErrorMessage(String.format(ERROR_EMPTY_LIST,tasks.size()));
+                else
+                    ui.showErrorMessage(String.format(ERROR_OUT_OF_BOUNDS,tasks.size()));
+            }
+            
         }
-        catch(IOException e){
-            System.out.println(" Beep Boop. An error occurred creating new text file.");
-            System.out.println(LINE);
-        }
-        readInput();
-        System.out.println(byeString);
-        System.out.println(LINE);
+    }
+
+    private void exit(){
+        ui.showByeMessage();
+        System.exit(0);
+    }
+
+    public static void main(String[] args) {
+        new DefinitelyRealRon("./src/data/data.txt").run();
     }
 }

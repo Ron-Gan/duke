@@ -1,4 +1,4 @@
-package classes;
+package task;
 
 public class Event extends Task {
     public String toDate, fromDate;
@@ -9,7 +9,7 @@ public class Event extends Task {
     }
 
     @Override
-    public void printTask(){
+    public String getTaskString(){
         String taskString;
         if(isDone){
             taskString = "   [E][X] ";
@@ -17,11 +17,11 @@ public class Event extends Task {
         else{
             taskString = "   [E][ ] ";
         }
-        System.out.println(taskString + description + " (from: " + fromDate + " to: "+ toDate + ")");
+        return(taskString + description + " (from: " + fromDate + " to: "+ toDate + ")");
     }
 
     @Override
-    public void printTaskWithIndex(){
+    public String getTaskStringWithIndex(){
         String taskString;
         if(isDone){
             taskString = " " + index + ". [E][X] ";
@@ -29,6 +29,6 @@ public class Event extends Task {
         else{
             taskString = " " + index + ". [E][ ] ";
         }
-        System.out.println(taskString + description + " (from: " + fromDate + " to: "+ toDate + ")");
+        return(taskString + description + " (from: " + fromDate + " to: "+ toDate + ")");
     }
 }

@@ -1,4 +1,4 @@
-package classes;
+package task;
 
 public class Todo extends Task {
     public Todo(String desc, int ind){
@@ -6,7 +6,7 @@ public class Todo extends Task {
     }
 
     @Override
-    public void printTask(){
+    public String getTaskString(){
         String taskString;
         if(isDone){
             taskString = "   [T][X] ";
@@ -14,11 +14,11 @@ public class Todo extends Task {
         else{
             taskString = "   [T][ ] ";
         }
-        System.out.println(taskString + description);
+        return(taskString + description);
     }
 
     @Override
-    public void printTaskWithIndex(){
+    public String getTaskStringWithIndex(){
         String taskString;
         if(isDone){
             taskString = " " + index + ". [T][X] ";
@@ -26,6 +26,6 @@ public class Todo extends Task {
         else{
             taskString = " " + index + ". [T][ ] ";
         }
-        System.out.println(taskString + description);
+       return(taskString + description);
     }
 }

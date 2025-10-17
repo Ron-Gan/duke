@@ -1,20 +1,18 @@
 package task;
 
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
 public class Event extends Task {
-    private String toDateRaw, fromDateRaw,toDateString,fromDateString;
-    private LocalDate toDate,fromDate;
+    private String toDateString,fromDateString;
+    private LocalDateTime toDate,fromDate;
 
-    public Event(String desc, int ind, String fromDate, String toDate){
+    public Event(String desc, int ind, LocalDateTime fromDate, LocalDateTime toDate){
         super(desc,ind);
-        this.fromDateRaw = fromDate;
-        this.toDateRaw = toDate;
-        this.fromDate = LocalDate.parse(fromDate);
-        this.fromDateString = this.fromDate.format(DateTimeFormatter.ofPattern("MMM d yyyy"));
-        this.toDate = LocalDate.parse(toDate);
-        this.toDateString = this.toDate.format(DateTimeFormatter.ofPattern("MMM d yyyy"));
+        this.fromDate = fromDate;
+        this.fromDateString = this.fromDate.format(DateTimeFormatter.ofPattern("MMM d yyyy, HHmm"));
+        this.toDate = toDate;
+        this.toDateString = this.toDate.format(DateTimeFormatter.ofPattern("MMM d yyyy, HHmm"));
     }
 
     @Override
@@ -26,7 +24,7 @@ public class Event extends Task {
         else{
             taskString = "   [E][ ] ";
         }
-        return(taskString + description + " (from: " + fromDateString + " to: "+ toDateString + ")");
+        return(taskString + description + " (from: " + fromDateString + " hrs | to: "+ toDateString + " hrs)");
     }
 
     @Override
@@ -38,7 +36,7 @@ public class Event extends Task {
         else{
             taskString = " " + index + ". [E][ ] ";
         }
-        return(taskString + description + " (from: " + fromDateString + " to: "+ toDateString + ")");
+        return(taskString + description + " (from: " + fromDateString + " hrs | to: "+ toDateString + "hrs)");
     }
 
     public String getToDateString(){
@@ -49,11 +47,11 @@ public class Event extends Task {
         return fromDateString;
     }
 
-    public String getToDateRaw(){
-        return toDateRaw;
+    public LocalDateTime getFromDate(){
+        return fromDate;
     }
 
-    public String getFromDateRaw(){
-        return fromDateRaw;
+    public LocalDateTime getToDate(){
+        return toDate;
     }
 }

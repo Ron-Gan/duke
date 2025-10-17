@@ -2,12 +2,16 @@ package commands;
 import task.Event;
 import task.TaskList;
 import ui.Ui;
+
+import java.time.LocalDateTime;
+
 import storage.Storage;
 
 public class AddEventCommand extends Command {
-    private String description, fromDate, toDate;
+    private String description;
+    private LocalDateTime fromDate, toDate;
 
-    public AddEventCommand(String description, String fromDate, String toDate){
+    public AddEventCommand(String description, LocalDateTime fromDate, LocalDateTime toDate){
         this.description = description;
         this.fromDate = fromDate;
         this.toDate = toDate;

@@ -60,6 +60,7 @@ public class Parser {
             return new ErrorCommand(ERROR_WRONG_DATE_FORMAT);
         }
     }
+    
     private Command prepareAddEvent(String arguments){
         boolean fromExist = (arguments.contains("/from "));
         boolean toExist = (arguments.contains("/to "));
@@ -82,8 +83,14 @@ public class Parser {
         if (description.isBlank()) {
             return new ErrorCommand(ERROR_EMPTY_DESC);
         }
-        return new AddEventCommand(description, fromDate, toDate);
+        try{
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy HHmm");
+            return new AddEventCommand(description, LocalDateTime.parse(fromDate, formatter),LocalDateTime.parse(toDate, formatter));
+        } catch(DateTimeParseException dtpe){
+            return new ErrorCommand(ERROR_WRONG_DATE_FORMAT);
+        }
     }
+
     private Command prepareList(){
         return new ListCommand();
     }

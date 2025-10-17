@@ -32,15 +32,14 @@ public class DataDecoder {
                 return t;
             case "D":
                 String deadlineISO = parts[3];
-                LocalDateTime deadline = LocalDateTime.parse(deadlineISO);
-                t = new Deadline(description,index,deadline);
+                t = new Deadline(description,index,LocalDateTime.parse(deadlineISO));
                 t.setStatus(isDone);
                 index+=1;
                 return t;
             case "E":
-                String fromDate = parts[3];
-                String toDate = parts[4];
-                t = new Event(description,index,fromDate,toDate);
+                String fromDateISO = parts[3];
+                String toDateISO = parts[4];
+                t = new Event(description,index,LocalDateTime.parse(fromDateISO),LocalDateTime.parse(toDateISO));
                 t.setStatus(isDone);
                 index+=1;
                 return t;

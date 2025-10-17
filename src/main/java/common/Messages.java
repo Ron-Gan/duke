@@ -1,5 +1,8 @@
 package common;
 
+/**
+ * Container for messages to be displayed
+ */
 public class Messages {
     public static final String MESSAGE_WELCOME = " Yo! I'm DefinitelyRealRon. Definitely Real. Definitely Ron.\n" +
     " How may I help you today?";

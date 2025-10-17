@@ -3,10 +3,19 @@ package task;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
+/**
+ * Represents an Event task with a start and end date.
+ */
 public class Event extends Task {
     private String toDateString,fromDateString;
     private LocalDateTime toDate,fromDate;
 
+    /**
+     * @param description of the task.
+     * @param index of task in a TaskList.
+     * @param fromDate start date of task.
+     * @param toDate end date of task.
+     */
     public Event(String desc, int ind, LocalDateTime fromDate, LocalDateTime toDate){
         super(desc,ind);
         this.fromDate = fromDate;

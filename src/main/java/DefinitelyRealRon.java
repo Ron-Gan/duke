@@ -11,6 +11,10 @@ import static common.Messages.ERROR_OUT_OF_BOUNDS;
 
 import java.io.IOException;
 
+/**
+ * Entry point of DefinitelyRealRon chatbot.
+ * Initializes the chatbot and starts interaction with the user.
+ */
 public class DefinitelyRealRon {
     private Ui ui;
     private TaskList tasks;
@@ -22,6 +26,7 @@ public class DefinitelyRealRon {
         storage = new Storage(filePath);
     }
 
+    /** Initialises the storage and tasklist and runs the loop. */
     public void run(){
         try{
             storage.initFile();
@@ -38,6 +43,7 @@ public class DefinitelyRealRon {
         exit();
     }
 
+    /** Reads the user command and executes it, until "bye" is entered. */
     private void runLoopUntilBye(){
         while(true){
             String input = ui.getInput();
@@ -56,12 +62,14 @@ public class DefinitelyRealRon {
             
         }
     }
-
+    
+    /** Prints the ByeMessage and exit. */
     private void exit(){
         ui.showByeMessage();
         System.exit(0);
     }
 
+    /** Specify storage file when creating new chatbot. */
     public static void main(String[] args) {
         new DefinitelyRealRon("./src/data/data.txt").run();
     }

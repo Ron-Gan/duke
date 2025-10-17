@@ -6,6 +6,9 @@ import task.TaskList;
 import ui.Ui;
 import storage.Storage;
 
+/**
+ * Changes the status of a task to NOT completed.
+ */
 public class UnmarkCommand extends Command{
     Integer index;
     public UnmarkCommand(Integer index){
@@ -13,6 +16,11 @@ public class UnmarkCommand extends Command{
     }
 
     @Override
+        /**
+     * Changes the status of a task to incomplete.
+     * Displays a message when successfully unmarked.
+     * Displays an error if task was already incomplete.
+     */
     public void execute(TaskList tasks, Ui ui, Storage storage){
        if(tasks.get(index).isDone){
             tasks.get(index).setStatus(false);

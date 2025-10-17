@@ -33,7 +33,7 @@ public class DataEncoder {
         taskString += task.description;
 
         if(task instanceof Deadline)
-            taskString += " | " + ((Deadline) task).getDeadlineRaw();
+            taskString += " | " + ((Deadline) task).getDeadline();
         else if(task instanceof Event)
             taskString += " | " + ((Event) task).getFromDateRaw() + " | " + ((Event) task).getToDateRaw();
 

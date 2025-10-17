@@ -3,12 +3,15 @@ import task.Deadline;
 import task.TaskList;
 import ui.Ui;
 
+import java.time.LocalDateTime;
+
 import storage.Storage;
 
 public class AddDeadlineCommand extends Command {
-    private String description, deadline;
+    private String description;
+    private LocalDateTime deadline;
 
-    public AddDeadlineCommand(String description, String deadline){
+    public AddDeadlineCommand(String description, LocalDateTime deadline){
         this.description = description;
         this.deadline = deadline;
     }

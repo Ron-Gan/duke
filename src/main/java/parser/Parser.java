@@ -4,6 +4,11 @@ import static common.Messages.ERROR_INVALID_BY;
 import static common.Messages.ERROR_INVALID_FROM_TO;
 import static common.Messages.ERROR_INVALID_INTEGER;
 import static common.Messages.ERROR_UNKNOWN_COMMAND;
+import static common.Messages.ERROR_WRONG_DATE_FORMAT;
+
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
 
 import commands.*;
 
@@ -48,7 +53,12 @@ public class Parser {
             return new ErrorCommand(ERROR_EMPTY_DESC);
         }
         String deadline = result[1];
-        return new AddDeadlineCommand(description, deadline);
+        try{
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy HHmm");
+            return new AddDeadlineCommand(description, LocalDateTime.parse(deadline, formatter));
+        } catch(DateTimeParseException dtpe){
+            return new ErrorCommand(ERROR_WRONG_DATE_FORMAT);
+        }
     }
     private Command prepareAddEvent(String arguments){
         boolean fromExist = (arguments.contains("/from "));

@@ -1,15 +1,15 @@
 package task;
-import java.time.LocalDate;
+
+import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
 public class Deadline extends Task {
-    private String deadlineRaw, deadlineDisplayString;
-    private LocalDate deadlineDate;
-    public Deadline(String desc, int ind, String deadline){
+    private String deadlineDisplayString;
+    private LocalDateTime deadline;
+    public Deadline(String desc, int ind, LocalDateTime deadline){
         super(desc,ind);
-        this.deadlineRaw = deadline;
-        this.deadlineDate = LocalDate.parse(deadline);
-        this.deadlineDisplayString = deadlineDate.format(DateTimeFormatter.ofPattern("MMM d yyyy"));
+        this.deadline = deadline;
+        this.deadlineDisplayString = deadline.format(DateTimeFormatter.ofPattern("MMM d yyyy, HHmm"));
     }
     
     @Override
@@ -21,7 +21,7 @@ public class Deadline extends Task {
         else{
             taskString = "   [D][ ] ";
         }
-        return(taskString + description + " (by: " + deadlineDisplayString + ")");
+        return(taskString + description + " (by: " + deadlineDisplayString + " hrs)");
     }
 
     @Override
@@ -33,14 +33,14 @@ public class Deadline extends Task {
         else{
             taskString = " " + index + ". [D][ ] ";
         }
-        return(taskString + description + " (by: " + deadlineDisplayString + ")");
+        return(taskString + description + " (by: " + deadlineDisplayString + " hrs)");
     }
 
     public String getDeadlineString(){
         return deadlineDisplayString;
     }
 
-    public String getDeadlineRaw(){
-        return deadlineRaw;
+    public LocalDateTime getDeadline(){
+        return deadline;
     }
 }

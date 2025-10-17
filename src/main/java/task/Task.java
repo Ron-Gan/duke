@@ -9,8 +9,8 @@ public abstract class Task {
     public int index;
     static int count = 0;
     /**
-     * @param description description of the task.
-     * @param index index of task in a TaskList.
+     * @param description of the task.
+     * @param index of task in a TaskList.
      */
     public Task(String description, int index){
         this.description = description;
@@ -30,12 +30,12 @@ public abstract class Task {
     }
 
     /**
-     * @return formatted String of Task.
+     * @return formatted string of Task.
      */
     public abstract String getTaskString();
 
     /**
-     * @return formatted String of Task with the index numbering.
+     * @return formatted string of Task with the index numbering.
      */
     public abstract String getTaskStringWithIndex();
 }

@@ -17,7 +17,7 @@ public class MarkCommand extends Command{
 
     @Override
     /**
-     * Changes the status of a task to completed.
+     * Changes the status of a task to incomplete.
      * Displays a message when successfully marked.
      * Displays an error if task was already completed.
      */

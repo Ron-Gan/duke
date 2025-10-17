@@ -1,6 +1,13 @@
 package task;
 
+/**
+ * Represents a To-Do task.
+ */
 public class Todo extends Task {
+    /**
+     * @param description of the task.
+     * @param index of task in a TaskList.
+     */
     public Todo(String desc, int ind){
         super(desc,ind);
     }

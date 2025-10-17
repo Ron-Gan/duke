@@ -3,9 +3,17 @@ package task;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
+/**
+ * Represents a deadline task with an end date.
+ */
 public class Deadline extends Task {
     private String deadlineDisplayString;
     private LocalDateTime deadline;
+    /**
+     * @param description of the task.
+     * @param index of task in a TaskList.
+     * @param deadline of the task.
+     */
     public Deadline(String desc, int ind, LocalDateTime deadline){
         super(desc,ind);
         this.deadline = deadline;

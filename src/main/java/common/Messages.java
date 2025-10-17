@@ -25,4 +25,6 @@ public class Messages {
     public static final String ERROR_ALREADY_MARKED = " Task %1$s was already marked :(";
     public static final String ERROR_ALREADY_UNMARKED = " Task %1$s was already unmarked :(";
     public static final String ERROR_OUT_OF_BOUNDS = " Bruh. You can't do that. You only have %1$d tasks :(";
+    public static final String ERROR_WRONG_DATE_FORMAT = " Man. Please input the date format as: dd/MM/yyyy HHmm :(";
+
 }

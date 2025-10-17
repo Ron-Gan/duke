@@ -1,11 +1,18 @@
 package task;
 
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+
 public class Event extends Task {
-    public String toDate, fromDate;
-    public Event(String desc, int ind, String fromDate, String toDate){
+    private String toDateString,fromDateString;
+    private LocalDateTime toDate,fromDate;
+
+    public Event(String desc, int ind, LocalDateTime fromDate, LocalDateTime toDate){
         super(desc,ind);
         this.fromDate = fromDate;
+        this.fromDateString = this.fromDate.format(DateTimeFormatter.ofPattern("MMM d yyyy, HHmm"));
         this.toDate = toDate;
+        this.toDateString = this.toDate.format(DateTimeFormatter.ofPattern("MMM d yyyy, HHmm"));
     }
 
     @Override
@@ -17,7 +24,7 @@ public class Event extends Task {
         else{
             taskString = "   [E][ ] ";
         }
-        return(taskString + description + " (from: " + fromDate + " to: "+ toDate + ")");
+        return(taskString + description + " (from: " + fromDateString + " hrs | to: "+ toDateString + " hrs)");
     }
 
     @Override
@@ -29,6 +36,22 @@ public class Event extends Task {
         else{
             taskString = " " + index + ". [E][ ] ";
         }
-        return(taskString + description + " (from: " + fromDate + " to: "+ toDate + ")");
+        return(taskString + description + " (from: " + fromDateString + " hrs | to: "+ toDateString + "hrs)");
+    }
+
+    public String getToDateString(){
+        return toDateString;
+    }
+
+    public String getFromDateString(){
+        return fromDateString;
+    }
+
+    public LocalDateTime getFromDate(){
+        return fromDate;
+    }
+
+    public LocalDateTime getToDate(){
+        return toDate;
     }
 }

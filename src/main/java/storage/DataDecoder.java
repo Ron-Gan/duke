@@ -7,6 +7,8 @@ import task.Deadline;
 import task.Event;
 import task.Task;
 
+import java.time.LocalDateTime;
+
 public class DataDecoder {
     static Integer index = 1;
     public static TaskList decodeData(List<String> encodedData){
@@ -29,15 +31,15 @@ public class DataDecoder {
                 index+=1;
                 return t;
             case "D":
-                String deadline = parts[3];
-                t = new Deadline(description,index,deadline);
+                String deadlineISO = parts[3];
+                t = new Deadline(description,index,LocalDateTime.parse(deadlineISO));
                 t.setStatus(isDone);
                 index+=1;
                 return t;
             case "E":
-                String fromDate = parts[3];
-                String toDate = parts[4];
-                t = new Event(description,index,fromDate,toDate);
+                String fromDateISO = parts[3];
+                String toDateISO = parts[4];
+                t = new Event(description,index,LocalDateTime.parse(fromDateISO),LocalDateTime.parse(toDateISO));
                 t.setStatus(isDone);
                 index+=1;
                 return t;

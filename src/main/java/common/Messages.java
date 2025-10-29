@@ -4,8 +4,9 @@ package common;
  * Container for messages to be displayed
  */
 public class Messages {
-    public static final String MESSAGE_WELCOME = " Yo! I'm DefinitelyRealRon. Definitely Real. Definitely Ron.\n" +
-    " How may I help you today?";
+
+    public static final String MESSAGE_WELCOME = " Yo! I'm DefinitelyRealRon. Definitely Real. Definitely Ron.\n"
+            + " How may I help you today?";
     public static final String MESSAGE_BYE = " Seeya! Hope I was helpful. I'm DefinitelyRealRon!";
     public static final String MESSAGE_SHOW_TASKLIST = " Here are the tasks in your list:";
     public static final String MESSAGE_MARKED = " You're so productive! I've marked this task as done:";
@@ -13,11 +14,11 @@ public class Messages {
     public static final String MESSAGE_ERROR = " Beep Boop. An error has occurred.";
     public static final String MESSAGE_ADDED = " Got it. I've added this task:\n %1$s\n Now you have %2$d tasks in your list.";
     public static final String MESSAGE_DELETED = " Ight bet. I've deleted this task:\n %1$s\n Now you have %2$d tasks in your list.";
+    public static final String MESSAGE_FOUND_TASKS = " Here are the matching tasks in your list:";
 
     public static final String ERROR_IO_INITIALISATION = " Initialisation Error. File may be open elsewhere :(";
     public static final String ERROR_INVALID_STORAGE = " Invalid path detected!\n Please ensure extension ends with .txt :(";
     public static final String ERROR_STORE_FAILED = " Unable to store data!\n Please check that the file is closed :(";
-
 
     public static final String ERROR_EMPTY_DESC = " Description for task cannot be empty :(";
     public static final String ERROR_UNKNOWN_COMMAND = " Sorry bruv. I don't understand %1$s :(";
@@ -29,5 +30,6 @@ public class Messages {
     public static final String ERROR_ALREADY_UNMARKED = " Task %1$s was already unmarked :(";
     public static final String ERROR_OUT_OF_BOUNDS = " Bruh. You can't do that. You only have %1$d tasks :(";
     public static final String ERROR_WRONG_DATE_FORMAT = " Man. Please input the date format as: dd/MM/yyyy HHmm :(";
+    public static final String MESSAGE_NO_MATCHING_TASKS = " No matching tasks found :(";
 
 }

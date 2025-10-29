@@ -193,7 +193,7 @@ public class Parser {
     }
 
     /**
-     * Parses arguments in the context of the MarkCommand. Returns error if
+     * Parses arguments in the context of the DeleteCommand. Returns error if
      * arguments are blank. Returns error if target index is out of bounds.
      *
      * @param arguments input except for first word.
@@ -212,6 +212,13 @@ public class Parser {
         return new DeleteCommand(index);
     }
 
+    /**
+     * Parses arguments in the context of the FindTaskCommand. Returns error if
+     * arguments are blank.
+     *
+     * @param arguments input except for first word.
+     * @return the prepared command.
+     */
     private Command prepareFind(String arguments) {
 
         if (arguments.isBlank()) {

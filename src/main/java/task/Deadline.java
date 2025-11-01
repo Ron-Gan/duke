@@ -7,48 +7,65 @@ import java.time.format.DateTimeFormatter;
  * Represents a deadline task with an end date.
  */
 public class Deadline extends Task {
+
     private String deadlineDisplayString;
     private LocalDateTime deadline;
+
     /**
      * @param description of the task.
      * @param index of task in a TaskList.
      * @param deadline of the task.
      */
-    public Deadline(String desc, int ind, LocalDateTime deadline){
-        super(desc,ind);
+    public Deadline(String desc, int ind, LocalDateTime deadline) {
+        super(desc, ind);
         this.deadline = deadline;
         this.deadlineDisplayString = deadline.format(DateTimeFormatter.ofPattern("MMM d yyyy, HHmm"));
     }
-    
+
     @Override
-    public String getTaskString(){
+    public String getTaskString() {
         String taskString;
-        if(isDone){
-            taskString = "   [D][X] ";
+        if (priority != null) {
+            if (isDone) {
+                taskString = String.format("   [D][X][%s] ", priority.toString());
+            } else {
+                taskString = String.format("   [D][ ][%s] ", priority.toString());
+            }
+        } else {
+            if (isDone) {
+                taskString = "   [D][X][ ] ";
+            } else {
+                taskString = "   [D][ ][ ] ";
+            }
         }
-        else{
-            taskString = "   [D][ ] ";
-        }
-        return(taskString + description + " (by: " + deadlineDisplayString + " hrs)");
+
+        return (taskString + description + "\n   (by: " + deadlineDisplayString + " hrs)");
     }
 
     @Override
-    public String getTaskStringWithIndex(){
+    public String getTaskStringWithIndex() {
         String taskString;
-        if(isDone){
-            taskString = " " + index + ". [D][X] ";
+        if (priority != null) {
+            if (isDone) {
+                taskString = " " + index + String.format(". [D][X][%s] ", priority.toString());
+            } else {
+                taskString = " " + index + String.format(". [D][ ][%s] ", priority.toString());
+            }
+        } else {
+            if (isDone) {
+                taskString = " " + index + ". [D][X][ ] ";
+            } else {
+                taskString = " " + index + ". [D][ ][ ] ";
+            }
         }
-        else{
-            taskString = " " + index + ". [D][ ] ";
-        }
-        return(taskString + description + " (by: " + deadlineDisplayString + " hrs)");
+        return (taskString + description + "\n    (by: " + deadlineDisplayString + " hrs)");
     }
 
-    public String getDeadlineString(){
+    public String getDeadlineString() {
         return deadlineDisplayString;
     }
 
-    public LocalDateTime getDeadline(){
+    public LocalDateTime getDeadline() {
         return deadline;
     }
 }

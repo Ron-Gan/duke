@@ -3,6 +3,8 @@ package parser;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import commands.AddDeadlineCommand;
 import commands.AddEventCommand;
@@ -13,13 +15,16 @@ import commands.ErrorCommand;
 import commands.FindTaskCommand;
 import commands.ListCommand;
 import commands.MarkCommand;
+import commands.SetPriorityCommand;
 import commands.UnmarkCommand;
 import static common.Messages.ERROR_EMPTY_DESC;
 import static common.Messages.ERROR_INVALID_BY;
 import static common.Messages.ERROR_INVALID_FROM_TO;
 import static common.Messages.ERROR_INVALID_INTEGER;
+import static common.Messages.ERROR_OUT_OF_BOUNDS;
 import static common.Messages.ERROR_UNKNOWN_COMMAND;
 import static common.Messages.ERROR_WRONG_DATE_FORMAT;
+import common.Priority;
 
 /**
  * Makes sense of the user's input.
@@ -57,6 +62,8 @@ public class Parser {
                 return (prepareDelete(arguments));
             case "find":
                 return (prepareFind(arguments));
+            case "priority":
+                return (preparePriority(arguments));
             default:
                 return new ErrorCommand(String.format(ERROR_UNKNOWN_COMMAND, input));
         }
@@ -111,39 +118,33 @@ public class Parser {
      * @return the prepared command
      */
     private Command prepareAddEvent(String arguments) {
-        boolean fromExist = (arguments.contains("/from "));
-        boolean toExist = (arguments.contains("/to "));
-        String description, fromDate, toDate;
+        // Remove any leading indexes or accidental numbers
+        arguments = arguments.trim().replaceFirst("^\\d+\\s*", "");
 
-        if (!fromExist || !toExist) {
-            String missing = !fromExist ? "/from" : "/to";
-            return new ErrorCommand(String.format(ERROR_INVALID_FROM_TO, missing));
+        // Regex to capture: description, fromDate, toDate
+        Pattern p = Pattern.compile("^(.*?)\\s*/from\\s*(.*?)\\s*/to\\s*(.*)$");
+        Matcher m = p.matcher(arguments);
+
+        if (!m.matches()) {
+            return new ErrorCommand(ERROR_INVALID_FROM_TO);
         }
 
-        /**
-         * Determines if user input /from or /to first. Runs the first way of
-         * parsing if /from is before /to.
-         */
-        if (arguments.indexOf("/from ") < arguments.indexOf("/to ")) {
-            fromDate = arguments.substring(arguments.indexOf("/from ") + 6, arguments.indexOf("/to ") - 1);
-            toDate = arguments.substring(arguments.indexOf("/to ") + 4);
-            description = arguments.split(" /from ")[0];
-        } /**
-         * Runs if the way of parsing is /to before /from.
-         */
-        else {
-            toDate = arguments.substring(arguments.indexOf("/to ") + 4, arguments.indexOf("/from ") - 1);
-            fromDate = arguments.substring(arguments.indexOf("/from ") + 6);
-            description = arguments.split(" /to ")[0];
-        }
+        String description = m.group(1).trim();
+        String fromDate = m.group(2).trim();
+        String toDate = m.group(3).trim();
 
         if (description.isBlank()) {
             return new ErrorCommand(ERROR_EMPTY_DESC);
         }
+
         try {
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy HHmm");
-            return new AddEventCommand(description, LocalDateTime.parse(fromDate, formatter), LocalDateTime.parse(toDate, formatter));
-        } catch (DateTimeParseException dtpe) {
+            return new AddEventCommand(
+                    description,
+                    LocalDateTime.parse(fromDate, formatter),
+                    LocalDateTime.parse(toDate, formatter)
+            );
+        } catch (DateTimeParseException e) {
             return new ErrorCommand(ERROR_WRONG_DATE_FORMAT);
         }
     }
@@ -226,5 +227,31 @@ public class Parser {
         }
 
         return new FindTaskCommand(arguments);
+    }
+
+    /**
+     * Parses arguments in the context of the PriorityCommand. Returns error if
+     * arguments are blank.
+     *
+     * @param arguments input except for first word.
+     * @return the prepared command.
+     */
+    private Command preparePriority(String arguments) {
+        Integer index = -1;
+        Priority priority;
+        if (arguments.isBlank()) {
+            return new ErrorCommand(ERROR_EMPTY_DESC);
+        }
+        try {
+            String indexString = arguments.split(" ")[0];
+            priority = Priority.valueOf(arguments.split(" ")[1].toUpperCase());
+            index = Integer.parseInt(indexString) - 1;
+        } catch (NumberFormatException e) {
+            return new ErrorCommand(ERROR_INVALID_INTEGER);
+        } catch (ArrayIndexOutOfBoundsException e) {
+            return new ErrorCommand(ERROR_OUT_OF_BOUNDS);
+        }
+
+        return new SetPriorityCommand(index, priority);
     }
 }

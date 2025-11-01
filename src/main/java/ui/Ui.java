@@ -10,6 +10,7 @@ import static common.Messages.MESSAGE_DELETED;
 import static common.Messages.MESSAGE_ERROR;
 import static common.Messages.MESSAGE_FOUND_TASKS;
 import static common.Messages.MESSAGE_MARKED;
+import static common.Messages.MESSAGE_PRIORITY_SET;
 import static common.Messages.MESSAGE_SHOW_TASKLIST;
 import static common.Messages.MESSAGE_UNMARKED;
 import static common.Messages.MESSAGE_WELCOME;
@@ -36,6 +37,7 @@ public class Ui {
      * Show message(s) to user. Encapsulated with LINEs.
      */
     public void showToUser(String... message) {
+        System.out.println();   // Ensure cursor is reset to prevent print issues
         out.println(LINE);
         for (String m : message) {
             out.println(m);
@@ -62,6 +64,8 @@ public class Ui {
      */
     public String getInput() {
         String input = in.nextLine();
+        out.println();
+        out.flush();
         return input;
     }
 
@@ -144,6 +148,12 @@ public class Ui {
         showToUser(
                 MESSAGE_FOUND_TASKS,
                 foundTaskString
+        );
+    }
+
+    public void showPriorityMessage(String taskString) {
+        showToUser(
+                String.format(MESSAGE_PRIORITY_SET, taskString)
         );
     }
 }

@@ -4,35 +4,42 @@ package task;
  * Represents a To-Do task.
  */
 public class Todo extends Task {
+
     /**
      * @param description of the task.
      * @param index of task in a TaskList.
      */
-    public Todo(String desc, int ind){
-        super(desc,ind);
+    public Todo(String desc, int ind) {
+        super(desc, ind);
     }
 
     @Override
-    public String getTaskString(){
+    public String getTaskString() {
         String taskString;
-        if(isDone){
-            taskString = "   [T][X] ";
+        if (isDone) {
+            taskString = "   [T][X]";
+        } else {
+            taskString = "   [T][ ]";
         }
-        else{
-            taskString = "   [T][ ] ";
+        if (priority != null) {
+            return (taskString + "[" + priority.toString() + "] " + description);
+        } else {
+            return (taskString + "[ ] " + description);
         }
-        return(taskString + description);
     }
 
     @Override
-    public String getTaskStringWithIndex(){
+    public String getTaskStringWithIndex() {
         String taskString;
-        if(isDone){
-            taskString = " " + index + ". [T][X] ";
+        if (isDone) {
+            taskString = " " + index + ". [T][X]";
+        } else {
+            taskString = " " + index + ". [T][ ]";
         }
-        else{
-            taskString = " " + index + ". [T][ ] ";
+        if (priority != null) {
+            return (taskString + "[" + priority.toString() + "] " + description);
+        } else {
+            return (taskString + "[ ] " + description);
         }
-       return(taskString + description);
     }
 }

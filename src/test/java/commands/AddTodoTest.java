@@ -11,7 +11,7 @@ import testutils.DummyUi;
 public class AddTodoTest {
 
     @Test
-    public void addTodo_addsTaskCorrectly() {
+    public void testAddTodo() {
         TaskList tasks = new TaskList();
         DummyUi ui = new DummyUi();
         DummyStorage storage = new DummyStorage();

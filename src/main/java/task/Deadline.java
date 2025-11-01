@@ -12,8 +12,8 @@ public class Deadline extends Task {
     private LocalDateTime deadline;
 
     /**
-     * @param description of the task.
-     * @param index of task in a TaskList.
+     * @param desc Description of the task.
+     * @param ind Index of task in a TaskList.
      * @param deadline of the task.
      */
     public Deadline(String desc, int ind, LocalDateTime deadline) {
@@ -25,40 +25,40 @@ public class Deadline extends Task {
     @Override
     public String getTaskString() {
         String taskString;
-        if (priority != null) {
-            if (isDone) {
-                taskString = String.format("   [D][X][%s] ", priority.toString());
+        if (this.getPriority() != null) {
+            if (this.getStatus()) {
+                taskString = String.format("   [D][X][%s] ", this.getPriority().toString());
             } else {
-                taskString = String.format("   [D][ ][%s] ", priority.toString());
+                taskString = String.format("   [D][ ][%s] ", this.getPriority().toString());
             }
         } else {
-            if (isDone) {
+            if (this.getStatus()) {
                 taskString = "   [D][X][ ] ";
             } else {
                 taskString = "   [D][ ][ ] ";
             }
         }
 
-        return (taskString + description + "\n   (by: " + deadlineDisplayString + " hrs)");
+        return (taskString + this.getDescription() + "\n   (by: " + deadlineDisplayString + " hrs)");
     }
 
     @Override
     public String getTaskStringWithIndex() {
         String taskString;
-        if (priority != null) {
-            if (isDone) {
-                taskString = " " + index + String.format(". [D][X][%s] ", priority.toString());
+        if (this.getPriority() != null) {
+            if (this.getStatus()) {
+                taskString = " " + this.getIndex() + String.format(". [D][X][%s] ", this.getPriority().toString());
             } else {
-                taskString = " " + index + String.format(". [D][ ][%s] ", priority.toString());
+                taskString = " " + this.getIndex() + String.format(". [D][ ][%s] ", this.getPriority().toString());
             }
         } else {
-            if (isDone) {
-                taskString = " " + index + ". [D][X][ ] ";
+            if (this.getStatus()) {
+                taskString = " " + this.getIndex() + ". [D][X][ ] ";
             } else {
-                taskString = " " + index + ". [D][ ][ ] ";
+                taskString = " " + this.getIndex() + ". [D][ ][ ] ";
             }
         }
-        return (taskString + description + "\n    (by: " + deadlineDisplayString + " hrs)");
+        return (taskString + this.getDescription() + "\n    (by: " + deadlineDisplayString + " hrs)");
     }
 
     public String getDeadlineString() {

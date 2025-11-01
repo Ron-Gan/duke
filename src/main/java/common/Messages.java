@@ -12,13 +12,16 @@ public class Messages {
     public static final String MESSAGE_MARKED = " You're so productive! I've marked this task as done:";
     public static final String MESSAGE_UNMARKED = " L! I've marked this task as not done yet:";
     public static final String MESSAGE_ERROR = " Beep Boop. An error has occurred.";
-    public static final String MESSAGE_ADDED = " Got it. I've added this task:\n%1$s\n Now you have %2$d tasks in your list.";
-    public static final String MESSAGE_DELETED = " Ight bet. I've deleted this task:\n%1$s\n Now you have %2$d tasks in your list.";
+    public static final String MESSAGE_ADDED = " Got it. I've added this task:\n%1$s\n"
+            + " Now you have %2$d tasks in your list.";
+    public static final String MESSAGE_DELETED = " Ight bet. I've deleted this task:\n%1$s\n"
+            + " Now you have %2$d tasks in your list.";
     public static final String MESSAGE_FOUND_TASKS = " Here are the matching tasks in your list:";
     public static final String MESSAGE_PRIORITY_SET = " Gotchu bro. I've set the priority of this task:\n%1$s";
 
     public static final String ERROR_IO_INITIALISATION = " Initialisation Error. File may be open elsewhere :(";
-    public static final String ERROR_INVALID_STORAGE = " Invalid path detected!\n Please ensure extension ends with .txt :(";
+    public static final String ERROR_INVALID_STORAGE = " Invalid path detected!\n"
+            + " Please ensure extension ends with .txt :(";
     public static final String ERROR_STORE_FAILED = " Unable to store data!\n Please check that the file is closed :(";
 
     public static final String ERROR_EMPTY_DESC = " Description for task cannot be empty :(";

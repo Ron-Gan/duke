@@ -7,10 +7,10 @@ import common.Priority;
  */
 public abstract class Task {
 
-    public boolean isDone = false;
-    public String description;
-    public int index;
-    public Priority priority;
+    private boolean isDone = false;
+    private String description;
+    private int index;
+    private Priority priority;
 
     /**
      * @param description of the task.
@@ -29,8 +29,21 @@ public abstract class Task {
         return isDone;
     }
 
+    public void setDescription(String desc) {
+        description = desc;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+
     public void setIndex(int newIndex) {
         this.index = newIndex;
+    }
+
+    public int getIndex() {
+        return index;
     }
 
     public Priority getPriority() {

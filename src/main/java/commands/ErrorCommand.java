@@ -16,10 +16,10 @@ public class ErrorCommand extends Command {
         this.description = description;
     }
 
-    @Override
     /**
      * Displays an error message.
      */
+    @Override
     public void execute(TaskList tasks, Ui ui, Storage storage) {
         if (description == ERROR_OUT_OF_BOUNDS) {
             ui.showErrorMessage(String.format(description, tasks.size()));

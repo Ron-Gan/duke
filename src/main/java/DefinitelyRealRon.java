@@ -21,6 +21,10 @@ public class DefinitelyRealRon {
     private TaskList tasks;
     private Storage storage;
 
+    /**
+     * Constructor for DefinitelyRealRon chatbot.
+     * @param filePath path to the storage file
+     */
     public DefinitelyRealRon(String filePath) {
         ui = new Ui();
         tasks = new TaskList();
@@ -60,8 +64,8 @@ public class DefinitelyRealRon {
                 c.execute(tasks, ui, storage);
             } catch (IndexOutOfBoundsException e) {
                 if (tasks.size() < 1) {
-                    ui.showErrorMessage(String.format(ERROR_EMPTY_LIST, tasks.size())); 
-                }else {
+                    ui.showErrorMessage(String.format(ERROR_EMPTY_LIST, tasks.size()));
+                } else {
                     ui.showErrorMessage(String.format(ERROR_OUT_OF_BOUNDS, tasks.size()));
                 }
             }

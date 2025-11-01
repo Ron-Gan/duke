@@ -31,41 +31,37 @@ import common.Priority;
  */
 public class Parser {
 
+    /**
+     * Parses the user input into a Command.
+     * @param input user input string
+     * @return the parsed Command
+     */
     public Command parse(String input) {
-        /**
-         * Search for the first word as the commandWord.
-         */
-        String commandWord = input.split(" ")[0];
 
-        /**
-         * All other words other than the first will be the arguments.
-         */
+        String commandWord = input.split(" ")[0];
         String arguments = input.substring(commandWord.length()).strip();
 
-        /**
-         * Read the input differently according to the commandWord.
-         */
         switch (commandWord) {
-            case "todo":
-                return (prepareAddTodo(arguments));
-            case "deadline":
-                return (prepareAddDeadline(arguments));
-            case "event":
-                return (prepareAddEvent(arguments));
-            case "list":
-                return (prepareList());
-            case "mark":
-                return (prepareMark(arguments));
-            case "unmark":
-                return (prepareUnmark(arguments));
-            case "delete":
-                return (prepareDelete(arguments));
-            case "find":
-                return (prepareFind(arguments));
-            case "priority":
-                return (preparePriority(arguments));
-            default:
-                return new ErrorCommand(String.format(ERROR_UNKNOWN_COMMAND, input));
+        case "todo":
+            return (prepareAddTodo(arguments));
+        case "deadline":
+            return (prepareAddDeadline(arguments));
+        case "event":
+            return (prepareAddEvent(arguments));
+        case "list":
+            return (prepareList());
+        case "mark":
+            return (prepareMark(arguments));
+        case "unmark":
+            return (prepareUnmark(arguments));
+        case "delete":
+            return (prepareDelete(arguments));
+        case "find":
+            return (prepareFind(arguments));
+        case "priority":
+            return (preparePriority(arguments));
+        default:
+            return new ErrorCommand(String.format(ERROR_UNKNOWN_COMMAND, input));
         }
     }
 
@@ -95,7 +91,7 @@ public class Parser {
         if (!arguments.contains(" /by ")) {
             return new ErrorCommand(ERROR_INVALID_BY);
         }
-        String result[] = arguments.split(" /by ");
+        String[] result = arguments.split(" /by ");
         String description = result[0];
         if (description.isBlank()) {
             return new ErrorCommand(ERROR_EMPTY_DESC);

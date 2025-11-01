@@ -6,10 +6,18 @@ import task.Task;
 import task.TaskList;
 import task.Todo;
 
+/**
+ * Encodes TaskList data into strings for storage.
+ */
 public class DataEncoder {
 
-    static Integer index = 1;
+    private static Integer index = 1;
 
+    /**
+     * Encodes the TaskList into a string for storage.
+     * @param tasks TaskList to be encoded
+     * @return encoded string representation of TaskList
+     */
     public static String encodeData(TaskList tasks) {
         String encodedData = "";
         for (Task task : tasks) {
@@ -18,33 +26,38 @@ public class DataEncoder {
         return (encodedData);
     }
 
+    /**
+     * Encodes a single Task into a string for storage.
+     * @param task Task to be encoded
+     * @return encoded string representation of the Task
+     */
     private static String encodeTask(Task task) {
         String taskString = "";
         if (task instanceof Todo) {
-            taskString = "T | "; 
-        }else if (task instanceof Deadline) {
-            taskString = "D | "; 
-        }else if (task instanceof Event) {
+            taskString = "T | ";
+        } else if (task instanceof Deadline) {
+            taskString = "D | ";
+        } else if (task instanceof Event) {
             taskString = "E | ";
         }
 
-        if (task.isDone) {
-            taskString += "1 | "; 
-        }else {
+        if (task.getStatus()) {
+            taskString += "1 | ";
+        } else {
             taskString += "0 | ";
         }
 
-        if (task.priority != null) {
-            taskString += task.priority.toString() + " | ";
+        if (task.getPriority() != null) {
+            taskString += task.getPriority().toString() + " | ";
         } else {
             taskString += "NIL | ";
         }
 
-        taskString += task.description;
+        taskString += task.getDescription();
 
         if (task instanceof Deadline) {
-            taskString += " | " + ((Deadline) task).getDeadline(); 
-        }else if (task instanceof Event) {
+            taskString += " | " + ((Deadline) task).getDeadline();
+        } else if (task instanceof Event) {
             taskString += " | " + ((Event) task).getFromDate() + " | " + ((Event) task).getToDate();
         }
 

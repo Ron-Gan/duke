@@ -20,6 +20,6 @@ public class AddTodoTest {
         command.execute(tasks, ui, storage);
 
         assertEquals(1, tasks.size());
-        assertEquals("test", ((Todo) tasks.get(0)).description);
+        assertEquals("test", ((Todo) tasks.get(0)).getDescription());
     }
 }

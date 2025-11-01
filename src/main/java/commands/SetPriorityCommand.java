@@ -10,9 +10,14 @@ import ui.Ui;
  */
 public class SetPriorityCommand extends Command {
 
-    Integer index;
-    Priority priority;
+    private Integer index;
+    private Priority priority;
 
+    /**
+     * Constructor for SetPriorityCommand.
+     * @param index of the task
+     * @param priority to be set
+     */
     public SetPriorityCommand(Integer index, Priority priority) {
         this.index = index;
         this.priority = priority;

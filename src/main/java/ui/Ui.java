@@ -24,6 +24,11 @@ public class Ui {
     private final Scanner in;
     private final PrintStream out;
 
+    /**
+     * Constructor for Ui.
+     * @param in InputStream
+     * @param out PrintStream
+     */
     public Ui(InputStream in, PrintStream out) {
         this.in = new Scanner(in);
         this.out = out;
@@ -37,7 +42,7 @@ public class Ui {
      * Show message(s) to user. Encapsulated with LINEs.
      */
     public void showToUser(String... message) {
-        System.out.println();   // Ensure cursor is reset to prevent print issues
+        System.out.println(); //Ensure cursor is reset to prevent print issues
         out.println(LINE);
         for (String m : message) {
             out.println(m);
@@ -144,6 +149,11 @@ public class Ui {
         );
     }
 
+    /**
+     * Displays message to show found tasks after find command has been
+     * executed.
+     * @param foundTaskString details of found tasks
+     */
     public void showFoundTasksMessage(String foundTaskString) {
         showToUser(
                 MESSAGE_FOUND_TASKS,
@@ -151,6 +161,10 @@ public class Ui {
         );
     }
 
+    /**
+     * Displays message to show that priority has been set for a task.
+     * @param taskString details of task
+     */
     public void showPriorityMessage(String taskString) {
         showToUser(
                 String.format(MESSAGE_PRIORITY_SET, taskString)

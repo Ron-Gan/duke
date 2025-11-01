@@ -5,10 +5,13 @@ import storage.Storage;
 import task.TaskList;
 import ui.Ui;
 
+/**
+ * Finds tasks that match a given keyword in their description.
+ */
 public class FindTaskCommand extends Command {
 
-    String targetString;
-    TaskList foundTasks = new TaskList();
+    private String targetString;
+    private TaskList foundTasks = new TaskList();
 
     public FindTaskCommand(String desc) {
         targetString = desc;
@@ -20,7 +23,7 @@ public class FindTaskCommand extends Command {
     @Override
     public void execute(TaskList tasks, Ui ui, Storage storage) {
         for (int i = 0; i < tasks.size(); i++) {
-            if (tasks.get(i).description.contains(targetString)) {
+            if (tasks.get(i).getDescription().contains(targetString)) {
                 foundTasks.add(tasks.get(i));
             }
         }

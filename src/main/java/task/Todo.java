@@ -16,30 +16,30 @@ public class Todo extends Task {
     @Override
     public String getTaskString() {
         String taskString;
-        if (isDone) {
+        if (this.getStatus()) {
             taskString = "   [T][X]";
         } else {
             taskString = "   [T][ ]";
         }
-        if (priority != null) {
-            return (taskString + "[" + priority.toString() + "] " + description);
+        if (this.getPriority() != null) {
+            return (taskString + "[" + this.getPriority().toString() + "] " + this.getDescription());
         } else {
-            return (taskString + "[ ] " + description);
+            return (taskString + "[ ] " + this.getDescription());
         }
     }
 
     @Override
     public String getTaskStringWithIndex() {
         String taskString;
-        if (isDone) {
-            taskString = " " + index + ". [T][X]";
+        if (this.getStatus()) {
+            taskString = " " + this.getIndex() + ". [T][X]";
         } else {
-            taskString = " " + index + ". [T][ ]";
+            taskString = " " + this.getIndex() + ". [T][ ]";
         }
-        if (priority != null) {
-            return (taskString + "[" + priority.toString() + "] " + description);
+        if (this.getPriority() != null) {
+            return (taskString + "[" + this.getPriority().toString() + "] " + this.getDescription());
         } else {
-            return (taskString + "[ ] " + description);
+            return (taskString + "[ ] " + this.getDescription());
         }
     }
 }

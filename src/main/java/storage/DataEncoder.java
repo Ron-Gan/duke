@@ -7,35 +7,46 @@ import task.TaskList;
 import task.Todo;
 
 public class DataEncoder {
-    static Integer index = 1;
-    public static String encodeData(TaskList tasks){
-        String encodedData = "";
-        for(Task task : tasks){
-            encodedData+=encodeTask(task);
-        }
-        return(encodedData);
-    }
-    private static String encodeTask(Task task){
-        String taskString = "";
-        if(task instanceof Todo)
-            taskString = "T | ";
-        else if(task instanceof Deadline)
-            taskString = "D | ";
-        else if(task instanceof Event)
-            taskString = "E | ";
 
-        if(task.isDone)
-            taskString += "1 | ";
-        else
+    static Integer index = 1;
+
+    public static String encodeData(TaskList tasks) {
+        String encodedData = "";
+        for (Task task : tasks) {
+            encodedData += encodeTask(task);
+        }
+        return (encodedData);
+    }
+
+    private static String encodeTask(Task task) {
+        String taskString = "";
+        if (task instanceof Todo) {
+            taskString = "T | "; 
+        }else if (task instanceof Deadline) {
+            taskString = "D | "; 
+        }else if (task instanceof Event) {
+            taskString = "E | ";
+        }
+
+        if (task.isDone) {
+            taskString += "1 | "; 
+        }else {
             taskString += "0 | ";
-        
+        }
+
+        if (task.priority != null) {
+            taskString += task.priority.toString() + " | ";
+        } else {
+            taskString += "NIL | ";
+        }
 
         taskString += task.description;
 
-        if(task instanceof Deadline)
-            taskString += " | " + ((Deadline) task).getDeadline();
-        else if(task instanceof Event)
+        if (task instanceof Deadline) {
+            taskString += " | " + ((Deadline) task).getDeadline(); 
+        }else if (task instanceof Event) {
             taskString += " | " + ((Event) task).getFromDate() + " | " + ((Event) task).getToDate();
+        }
 
         taskString += "\n";
         return taskString;

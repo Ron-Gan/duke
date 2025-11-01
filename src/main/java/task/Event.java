@@ -7,8 +7,9 @@ import java.time.format.DateTimeFormatter;
  * Represents an Event task with a start and end date.
  */
 public class Event extends Task {
-    private String toDateString,fromDateString;
-    private LocalDateTime toDate,fromDate;
+
+    private String toDateString, fromDateString;
+    private LocalDateTime toDate, fromDate;
 
     /**
      * @param description of the task.
@@ -16,8 +17,8 @@ public class Event extends Task {
      * @param fromDate start date of task.
      * @param toDate end date of task.
      */
-    public Event(String desc, int ind, LocalDateTime fromDate, LocalDateTime toDate){
-        super(desc,ind);
+    public Event(String desc, int ind, LocalDateTime fromDate, LocalDateTime toDate) {
+        super(desc, ind);
         this.fromDate = fromDate;
         this.fromDateString = this.fromDate.format(DateTimeFormatter.ofPattern("MMM d yyyy, HHmm"));
         this.toDate = toDate;
@@ -25,42 +26,56 @@ public class Event extends Task {
     }
 
     @Override
-    public String getTaskString(){
+    public String getTaskString() {
         String taskString;
-        if(isDone){
-            taskString = "   [E][X] ";
+        if (priority != null) {
+            if (isDone) {
+                taskString = String.format("   [E][X][%s] ", priority.toString());
+            } else {
+                taskString = String.format("   [E][ ][%s] ", priority.toString());
+            }
+        } else {
+            if (isDone) {
+                taskString = "   [E][X][ ] ";
+            } else {
+                taskString = "   [E][ ][ ] ";
+            }
         }
-        else{
-            taskString = "   [E][ ] ";
-        }
-        return(taskString + description + " (from: " + fromDateString + " hrs | to: "+ toDateString + " hrs)");
+        return (taskString + description + "\n   (from: " + fromDateString + " hrs | to: " + toDateString + " hrs)");
     }
 
     @Override
-    public String getTaskStringWithIndex(){
+    public String getTaskStringWithIndex() {
         String taskString;
-        if(isDone){
-            taskString = " " + index + ". [E][X] ";
+        if (priority != null) {
+            if (isDone) {
+                taskString = " " + index + String.format(". [E][X][%s] ", priority.toString());
+            } else {
+                taskString = " " + index + String.format(". [E][ ][%s] ", priority.toString());
+            }
+        } else {
+            if (isDone) {
+                taskString = " " + index + ". [E][X][ ] ";
+            } else {
+                taskString = " " + index + ". [E][ ][ ] ";
+            }
         }
-        else{
-            taskString = " " + index + ". [E][ ] ";
-        }
-        return(taskString + description + " (from: " + fromDateString + " hrs | to: "+ toDateString + "hrs)");
+        return (taskString + description + "\n    (from: " + fromDateString + " hrs | to: " + toDateString + "hrs)");
     }
 
-    public String getToDateString(){
+    public String getToDateString() {
         return toDateString;
     }
 
-    public String getFromDateString(){
+    public String getFromDateString() {
         return fromDateString;
     }
 
-    public LocalDateTime getFromDate(){
+    public LocalDateTime getFromDate() {
         return fromDate;
     }
 
-    public LocalDateTime getToDate(){
+    public LocalDateTime getToDate() {
         return toDate;
     }
 }

@@ -1,6 +1,6 @@
 package commands;
 
-import static common.Messages.MESSAGE_NO_MATCHING_TASKS;
+import static common.Messages.ERROR_NO_MATCHING_TASKS;
 import storage.Storage;
 import task.TaskList;
 import ui.Ui;
@@ -25,7 +25,7 @@ public class FindTaskCommand extends Command {
             }
         }
         if (foundTasks.isEmpty()) {
-            ui.showErrorMessage(MESSAGE_NO_MATCHING_TASKS);
+            ui.showErrorMessage(ERROR_NO_MATCHING_TASKS);
         } else {
             String foundTasksString = "";
 

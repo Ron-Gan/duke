@@ -40,7 +40,9 @@ public class Ui {
     }
 
     /**
-     * Show message(s) to user. Encapsulated with LINEs.
+     * Shows one or more messages to the user, each encapsulated with lines.
+     *
+     * @param message Messages to display.
      */
     public void showToUser(String... message) {
         System.out.println(); //Ensure cursor is reset to prevent print issues

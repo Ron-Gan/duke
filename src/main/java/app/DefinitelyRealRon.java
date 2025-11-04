@@ -116,7 +116,9 @@ public final class DefinitelyRealRon {
     }
 
     /**
-     * Specify storage file when creating new chatbot.
+     * Creates and runs a new chatbot instance with the default storage file.
+     *
+     * @param args Command-line arguments.
      */
     public static void main(String[] args) {
         new DefinitelyRealRon("./data/data.txt").run();

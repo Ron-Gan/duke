@@ -9,15 +9,17 @@ import ui.Ui;
  */
 public class ListCommand extends Command {
 
-    /** Displays an indexed TaskList when executed. */
+    /**
+     * Displays an indexed TaskList when executed.
+     */
     @Override
-    public void execute(TaskList tasks, Ui ui, Storage storage) {
+    public String execute(TaskList tasks, Ui ui, Storage storage) {
         String taskListString = "";
 
         for (int i = 0; i < tasks.size(); i += 1) {
             taskListString += tasks.get(i).getTaskStringWithIndex() + "\n";
         }
         taskListString = taskListString.substring(0, taskListString.length() - 1);
-        ui.showTaskListMessage(taskListString);
+        return ui.showTaskListMessage(taskListString);
     }
 }

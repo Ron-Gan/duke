@@ -8,8 +8,8 @@ import java.time.format.DateTimeFormatter;
  */
 public class Deadline extends Task {
 
-    private String deadlineDisplayString;
-    private LocalDateTime deadline;
+    private final String deadlineDisplayString;
+    private final LocalDateTime deadline;
 
     /**
      * @param desc Description of the task.

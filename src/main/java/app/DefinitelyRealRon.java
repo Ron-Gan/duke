@@ -1,3 +1,4 @@
+package app;
 
 import java.io.IOException;
 
@@ -15,7 +16,7 @@ import ui.Ui;
  * Entry point of DefinitelyRealRon chatbot. Initializes the chatbot and starts
  * interaction with the user.
  */
-public class DefinitelyRealRon {
+public final class DefinitelyRealRon {
 
     private Ui ui;
     private TaskList tasks;
@@ -23,18 +24,38 @@ public class DefinitelyRealRon {
 
     /**
      * Constructor for DefinitelyRealRon chatbot.
+     *
      * @param filePath path to the storage file
      */
     public DefinitelyRealRon(String filePath) {
         ui = new Ui();
         tasks = new TaskList();
         storage = new Storage(filePath);
+        initStorage();
+    }
+
+    public DefinitelyRealRon() {
+        this("./data/data.txt");
+    }
+
+    public void initStorage() {
+        try {
+            storage.initFile();
+            tasks = storage.load();
+        } catch (IOException e) {
+            ui.showErrorMessage(ERROR_IO_INITIALISATION);
+            System.exit(0);
+        } catch (InvalidStoragePathException e) {
+            ui.showErrorMessage(e.getMessage());
+            System.exit(0);
+        }
     }
 
     /**
      * Initialises the storage and tasklist and runs the loop.
      */
     public void run() {
+
         try {
             storage.initFile();
             tasks = storage.load();
@@ -48,6 +69,19 @@ public class DefinitelyRealRon {
         ui.showWelcomeMessage();
         runLoopUntilBye();
         exit();
+    }
+
+    public String getResponse(String input) {
+        Command c = new Parser().parse(input);
+        try {
+            return c.execute(tasks, ui, storage);
+        } catch (IndexOutOfBoundsException e) {
+            if (tasks.size() < 1) {
+                return String.format(ERROR_EMPTY_LIST, tasks.size());
+            } else {
+                return String.format(ERROR_OUT_OF_BOUNDS, tasks.size());
+            }
+        }
     }
 
     /**

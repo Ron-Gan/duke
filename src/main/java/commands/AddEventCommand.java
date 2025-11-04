@@ -18,9 +18,10 @@ public class AddEventCommand extends Command {
 
     /**
      * Constructor for AddEventCommand.
+     *
      * @param description of event task
-     * @param fromDate    start date and time of the event
-     * @param toDate      end date and time of the event
+     * @param fromDate start date and time of the event
+     * @param toDate end date and time of the event
      */
     public AddEventCommand(String description, LocalDateTime fromDate, LocalDateTime toDate) {
         this.description = description;
@@ -33,10 +34,10 @@ public class AddEventCommand extends Command {
      * list to storage.
      */
     @Override
-    public void execute(TaskList tasks, Ui ui, Storage storage) {
+    public String execute(TaskList tasks, Ui ui, Storage storage) {
         Event t = new Event(description, tasks.size() + 1, fromDate, toDate);
         tasks.addTask(t);
-        ui.showAddMessage(t.getTaskString(), tasks.size());
         saveToStorage(tasks, ui, storage);
+        return ui.showAddMessage(t.getTaskString(), tasks.size());
     }
 }

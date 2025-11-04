@@ -15,6 +15,7 @@ public class SetPriorityCommand extends Command {
 
     /**
      * Constructor for SetPriorityCommand.
+     *
      * @param index of the task
      * @param priority to be set
      */
@@ -24,9 +25,9 @@ public class SetPriorityCommand extends Command {
     }
 
     @Override
-    public void execute(TaskList tasks, Ui ui, Storage storage) {
+    public String execute(TaskList tasks, Ui ui, Storage storage) {
         tasks.get(index).setPriority(priority);
-        ui.showPriorityMessage(tasks.get(index).getTaskString());
         saveToStorage(tasks, ui, storage);
+        return ui.showPriorityMessage(tasks.get(index).getTaskString());
     }
 }

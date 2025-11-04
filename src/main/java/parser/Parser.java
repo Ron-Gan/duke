@@ -21,7 +21,9 @@ import static common.Messages.ERROR_EMPTY_DESC;
 import static common.Messages.ERROR_INVALID_BY;
 import static common.Messages.ERROR_INVALID_FROM_TO;
 import static common.Messages.ERROR_INVALID_INTEGER;
+import static common.Messages.ERROR_INVALID_PRIORITY;
 import static common.Messages.ERROR_OUT_OF_BOUNDS;
+import static common.Messages.ERROR_TO_BEFORE_FROM;
 import static common.Messages.ERROR_UNKNOWN_COMMAND;
 import static common.Messages.ERROR_WRONG_DATE_FORMAT;
 import common.Priority;
@@ -33,6 +35,7 @@ public class Parser {
 
     /**
      * Parses the user input into a Command.
+     *
      * @param input user input string
      * @return the parsed Command
      */
@@ -42,26 +45,28 @@ public class Parser {
         String arguments = input.substring(commandWord.length()).strip();
 
         switch (commandWord) {
-        case "todo":
-            return (prepareAddTodo(arguments));
-        case "deadline":
-            return (prepareAddDeadline(arguments));
-        case "event":
-            return (prepareAddEvent(arguments));
-        case "list":
-            return (prepareList());
-        case "mark":
-            return (prepareMark(arguments));
-        case "unmark":
-            return (prepareUnmark(arguments));
-        case "delete":
-            return (prepareDelete(arguments));
-        case "find":
-            return (prepareFind(arguments));
-        case "priority":
-            return (preparePriority(arguments));
-        default:
-            return new ErrorCommand(String.format(ERROR_UNKNOWN_COMMAND, input));
+            case "todo":
+                return (prepareAddTodo(arguments));
+            case "deadline":
+                return (prepareAddDeadline(arguments));
+            case "event":
+                return (prepareAddEvent(arguments));
+            case "list":
+                return (prepareList());
+            case "mark":
+                return (prepareMark(arguments));
+            case "unmark":
+                return (prepareUnmark(arguments));
+            case "delete":
+                return (prepareDelete(arguments));
+            case "find":
+                return (prepareFind(arguments));
+            case "priority":
+                return (preparePriority(arguments));
+            case "bye":
+                System.exit(0);
+            default:
+                return new ErrorCommand(String.format(ERROR_UNKNOWN_COMMAND, input));
         }
     }
 
@@ -92,14 +97,24 @@ public class Parser {
             return new ErrorCommand(ERROR_INVALID_BY);
         }
         String[] result = arguments.split(" /by ");
+        assert result.length >= 2 : "Split result should have at least 2 parts";
+
         String description = result[0];
         if (description.isBlank()) {
             return new ErrorCommand(ERROR_EMPTY_DESC);
         }
+
         String deadline = result[1];
+        assert deadline != null : "Deadline string should not be null";
+
         try {
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy HHmm");
-            return new AddDeadlineCommand(description, LocalDateTime.parse(deadline, formatter));
+            LocalDateTime parsedDateTime = LocalDateTime.parse(deadline, formatter);
+            assert parsedDateTime != null : "Parsed datetime should not be null";
+
+            Command command = new AddDeadlineCommand(description, parsedDateTime);
+            assert command != null : "Command should not be null";
+            return command;
         } catch (DateTimeParseException dtpe) {
             return new ErrorCommand(ERROR_WRONG_DATE_FORMAT);
         }
@@ -135,11 +150,19 @@ public class Parser {
 
         try {
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy HHmm");
-            return new AddEventCommand(
-                    description,
-                    LocalDateTime.parse(fromDate, formatter),
-                    LocalDateTime.parse(toDate, formatter)
-            );
+            LocalDateTime parsedFrom = LocalDateTime.parse(fromDate, formatter);
+            LocalDateTime parsedTo = LocalDateTime.parse(toDate, formatter);
+            if (parsedTo.isBefore(parsedFrom)) {
+                return new ErrorCommand(ERROR_TO_BEFORE_FROM);
+            }
+
+            assert parsedFrom != null : "Parsed from datetime should not be null";
+            assert parsedTo != null : "Parsed to datetime should not be null";
+            assert !parsedTo.isBefore(parsedFrom) : "End time should not be before start time";
+
+            Command command = new AddEventCommand(description, parsedFrom, parsedTo);
+            assert command != null : "Command should not be null";
+            return command;
         } catch (DateTimeParseException e) {
             return new ErrorCommand(ERROR_WRONG_DATE_FORMAT);
         }
@@ -157,7 +180,7 @@ public class Parser {
      * @return the prepared command.
      */
     private Command prepareMark(String arguments) {
-        Integer index = -1;
+        Integer index;
         if (arguments.isBlank()) {
             return new ErrorCommand(ERROR_EMPTY_DESC);
         }
@@ -177,7 +200,7 @@ public class Parser {
      * @return the prepared command.
      */
     private Command prepareUnmark(String arguments) {
-        Integer index = -1;
+        Integer index;
         if (arguments.isBlank()) {
             return new ErrorCommand(ERROR_EMPTY_DESC);
         }
@@ -197,7 +220,7 @@ public class Parser {
      * @return the prepared command.
      */
     private Command prepareDelete(String arguments) {
-        Integer index = -1;
+        Integer index;
         if (arguments.isBlank()) {
             return new ErrorCommand(ERROR_EMPTY_DESC);
         }
@@ -233,19 +256,21 @@ public class Parser {
      * @return the prepared command.
      */
     private Command preparePriority(String arguments) {
-        Integer index = -1;
+        Integer index;
         Priority priority;
         if (arguments.isBlank()) {
             return new ErrorCommand(ERROR_EMPTY_DESC);
         }
         try {
             String indexString = arguments.split(" ")[0];
-            priority = Priority.valueOf(arguments.split(" ")[1].toUpperCase());
             index = Integer.parseInt(indexString) - 1;
+            priority = Priority.valueOf(arguments.split(" ")[1].toUpperCase());
         } catch (NumberFormatException e) {
             return new ErrorCommand(ERROR_INVALID_INTEGER);
         } catch (ArrayIndexOutOfBoundsException e) {
             return new ErrorCommand(ERROR_OUT_OF_BOUNDS);
+        } catch (IllegalArgumentException e) {
+            return new ErrorCommand(ERROR_INVALID_PRIORITY);
         }
 
         return new SetPriorityCommand(index, priority);

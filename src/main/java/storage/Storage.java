@@ -15,7 +15,7 @@ import task.TaskList;
 public class Storage {
 
     public static final String DEFAULT_STORAGE_PATH = "data.txt";
-    private String filePath;
+    private final String filePath;
 
     public Storage(String filePath) {
         this.filePath = filePath;
@@ -27,6 +27,7 @@ public class Storage {
 
     /**
      * Loads the tasks from storage file.
+     *
      * @return TaskList loaded from storage
      * @throws IOException if reading the file fails
      */
@@ -36,6 +37,7 @@ public class Storage {
 
     /**
      * Saves the tasks to storage file.
+     *
      * @param tasks TaskList to be saved
      * @throws IOException if writing to the file fails
      */
@@ -49,6 +51,7 @@ public class Storage {
 
     /**
      * Initialises the storage file.
+     *
      * @throws IOException if file operations fail
      * @throws InvalidStoragePathException if the storage path is invalid
      */
@@ -77,6 +80,7 @@ public class Storage {
      * Exception thrown for invalid storage file paths.
      */
     public static class InvalidStoragePathException extends Exception {
+
         public InvalidStoragePathException(String message) {
             super(message);
         }

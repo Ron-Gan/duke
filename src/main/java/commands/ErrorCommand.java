@@ -10,7 +10,7 @@ import ui.Ui;
  */
 public class ErrorCommand extends Command {
 
-    private String description;
+    private final String description;
 
     public ErrorCommand(String description) {
         this.description = description;
@@ -20,11 +20,11 @@ public class ErrorCommand extends Command {
      * Displays an error message.
      */
     @Override
-    public void execute(TaskList tasks, Ui ui, Storage storage) {
-        if (description == ERROR_OUT_OF_BOUNDS) {
-            ui.showErrorMessage(String.format(description, tasks.size()));
+    public String execute(TaskList tasks, Ui ui, Storage storage) {
+        if (description.equals(ERROR_OUT_OF_BOUNDS)) {
+            return ui.showErrorMessage(String.format(description, tasks.size()));
         } else {
-            ui.showErrorMessage(description);
+            return ui.showErrorMessage(description);
         }
     }
 }

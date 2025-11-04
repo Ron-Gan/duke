@@ -26,6 +26,7 @@ public class Ui {
 
     /**
      * Constructor for Ui.
+     *
      * @param in InputStream
      * @param out PrintStream
      */
@@ -80,10 +81,8 @@ public class Ui {
      * @param taskString details of task; formatted in task objects.
      * @param size size of tasklist.
      */
-    public void showAddMessage(String taskString, Integer size) {
-        showToUser(
-                String.format(MESSAGE_ADDED, taskString, size)
-        );
+    public String showAddMessage(String taskString, Integer size) {
+        return (String.format(MESSAGE_ADDED, taskString, size));
     }
 
     /**
@@ -91,11 +90,8 @@ public class Ui {
      *
      * @param taskListString details of tasks; formatted in taskList object.
      */
-    public void showTaskListMessage(String taskListString) {
-        showToUser(
-                MESSAGE_SHOW_TASKLIST,
-                taskListString
-        );
+    public String showTaskListMessage(String taskListString) {
+        return MESSAGE_SHOW_TASKLIST + "\n" + taskListString;
     }
 
     /**
@@ -104,11 +100,8 @@ public class Ui {
      *
      * @param taskString details of task; formatted in task objects.
      */
-    public void showMarkMessage(String taskString) {
-        showToUser(
-                MESSAGE_MARKED,
-                taskString
-        );
+    public String showMarkMessage(String taskString) {
+        return MESSAGE_MARKED + "\n" + taskString;
     }
 
     /**
@@ -117,11 +110,8 @@ public class Ui {
      *
      * @param taskString details of task; formatted in task objects.
      */
-    public void showUnmarkMessage(String taskString) {
-        showToUser(
-                MESSAGE_UNMARKED,
-                taskString
-        );
+    public String showUnmarkMessage(String taskString) {
+        return MESSAGE_UNMARKED + "\n" + taskString;
     }
 
     /**
@@ -129,11 +119,8 @@ public class Ui {
      *
      * @param errorMsg describes the error faced.
      */
-    public void showErrorMessage(String errorMsg) {
-        showToUser(
-                MESSAGE_ERROR,
-                errorMsg
-        );
+    public String showErrorMessage(String errorMsg) {
+        return MESSAGE_ERROR + "\n" + errorMsg;
     }
 
     /**
@@ -143,31 +130,26 @@ public class Ui {
      * @param taskString details of task; formatted in task objects.
      * @param size size of tasklist.
      */
-    public void showDeleteMessage(String taskString, Integer size) {
-        showToUser(
-                String.format(MESSAGE_DELETED, taskString, size)
-        );
+    public String showDeleteMessage(String taskString, Integer size) {
+        return String.format(MESSAGE_DELETED, taskString, size);
     }
 
     /**
      * Displays message to show found tasks after find command has been
      * executed.
+     *
      * @param foundTaskString details of found tasks
      */
-    public void showFoundTasksMessage(String foundTaskString) {
-        showToUser(
-                MESSAGE_FOUND_TASKS,
-                foundTaskString
-        );
+    public String showFoundTasksMessage(String foundTaskString) {
+        return MESSAGE_FOUND_TASKS + "\n" + foundTaskString;
     }
 
     /**
      * Displays message to show that priority has been set for a task.
+     *
      * @param taskString details of task
      */
-    public void showPriorityMessage(String taskString) {
-        showToUser(
-                String.format(MESSAGE_PRIORITY_SET, taskString)
-        );
+    public String showPriorityMessage(String taskString) {
+        return String.format(MESSAGE_PRIORITY_SET, taskString);
     }
 }

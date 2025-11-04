@@ -1,4 +1,5 @@
 package commands;
+
 import java.io.IOException;
 
 import static common.Messages.ERROR_STORE_FAILED;
@@ -10,10 +11,11 @@ import ui.Ui;
  * Represents an executable command.
  */
 public abstract class Command {
+
     /**
      * Runs the logic of the execution.
      */
-    public abstract void execute(TaskList tasks, Ui ui, Storage storage);
+    public abstract String execute(TaskList tasks, Ui ui, Storage storage);
 
     /**
      * Sends the taskList to be saved in the storage.
@@ -24,5 +26,6 @@ public abstract class Command {
         } catch (IOException e) {
             ui.showErrorMessage(ERROR_STORE_FAILED);
         }
-    };
+    }
+;
 }

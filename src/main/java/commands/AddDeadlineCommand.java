@@ -1,4 +1,5 @@
 package commands;
+
 import java.time.LocalDateTime;
 
 import storage.Storage;
@@ -10,11 +11,13 @@ import ui.Ui;
  * Adds a deadline task into the TaskList.
  */
 public class AddDeadlineCommand extends Command {
+
     private String description;
     private LocalDateTime deadline;
 
     /**
      * Constructor for AddDeadlineCommand.
+     *
      * @param description of deadline task
      * @param deadline of the task
      */
@@ -24,15 +27,14 @@ public class AddDeadlineCommand extends Command {
     }
 
     /**
-     * Adds a deadline task into the TaskList.
-     * Displays an AddMessage.
-     * Saves new list to storage.
+     * Adds a deadline task into the TaskList. Displays an AddMessage. Saves new
+     * list to storage.
      */
     @Override
-    public void execute(TaskList tasks, Ui ui, Storage storage) {
+    public String execute(TaskList tasks, Ui ui, Storage storage) {
         Deadline t = new Deadline(description, tasks.size() + 1, deadline);
         tasks.addTask(t);
-        ui.showAddMessage(t.getTaskString(), tasks.size());
         saveToStorage(tasks, ui, storage);
+        return ui.showAddMessage(t.getTaskString(), tasks.size());
     }
 }

@@ -18,7 +18,6 @@ import commands.MarkCommand;
 import commands.SetPriorityCommand;
 import commands.UnmarkCommand;
 import static common.Messages.ERROR_EMPTY_DESC;
-import static common.Messages.ERROR_INVALID_BY;
 import static common.Messages.ERROR_INVALID_FROM_TO;
 import static common.Messages.ERROR_INVALID_INTEGER;
 import static common.Messages.ERROR_INVALID_PRIORITY;
@@ -93,18 +92,23 @@ public class Parser {
      * @return the prepared command
      */
     private Command prepareAddDeadline(String arguments) {
+        assert arguments != null : "Arguments should not be null";
+
         if (!arguments.contains(" /by ")) {
-            return new ErrorCommand(ERROR_INVALID_BY);
+            return new ErrorCommand(ERROR_EMPTY_DESC);
         }
+
         String[] result = arguments.split(" /by ");
         assert result.length >= 2 : "Split result should have at least 2 parts";
 
-        String description = result[0];
+        String description = result[0].trim(); // Add trim() here
+        String deadline = result[1].trim();     // And here
+
+        // Check for empty description BEFORE trying to parse the date
         if (description.isBlank()) {
             return new ErrorCommand(ERROR_EMPTY_DESC);
         }
 
-        String deadline = result[1];
         assert deadline != null : "Deadline string should not be null";
 
         try {

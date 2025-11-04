@@ -38,6 +38,7 @@ application {
 }
 
 shadowJar {
+    archiveFileName = 'DefinitelyRealRon.jar'
     archiveBaseName = "DefinitelyRealRon"
     archiveClassifier = null
 }
